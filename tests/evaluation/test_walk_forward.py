@@ -47,7 +47,9 @@ def test_walk_forward_skips_holdout_and_reports_covid_variants(synthetic_panel) 
     # At least one COVID fold exists in the eval window when min_train is 12.
     assert any(f.is_covid_shock for f in result.folds)
     assert result.metrics.headline.n == sum(1 for f in result.folds if not f.is_covid_shock)
-    assert result.metrics.classifier["available"] is False
+    # Phase 3: direction classifier derived from sign(point) vs sign(actual).
+    assert result.metrics.classifier["available"] is True
+    assert result.metrics.classifier["confusion_matrix"] is not None
 
 
 def test_holdout_unlock_required_to_score(synthetic_panel) -> None:

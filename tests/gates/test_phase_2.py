@@ -219,7 +219,8 @@ def test_phase_2_baselines_run_end_to_end_through_backtest() -> None:
         assert result.metrics.full_sample.n >= result.metrics.headline.n
         assert result.metrics.headline.n > 0
         assert result.metrics.full_sample.rmse >= 0
-        assert result.metrics.classifier["available"] is False
+        # Phase 3 attaches sign-based direction classifier metrics on folds.
+        assert result.metrics.classifier["available"] is True
         for fold in result.folds:
             assert isinstance(fold.as_of_date, date)
             assert fold.as_of_date >= fold.target_ref_month

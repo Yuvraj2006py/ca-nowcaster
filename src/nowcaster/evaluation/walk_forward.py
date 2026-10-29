@@ -7,6 +7,7 @@ full-sample metrics. Model verdicts belong in Phase 3 evaluation_report.md.
 
 from __future__ import annotations
 
+import math
 from collections.abc import Callable, Mapping, Sequence
 from dataclasses import dataclass, field
 from datetime import date
@@ -33,7 +34,10 @@ from nowcaster.evaluation.metrics import (
     MetricBundle,
     RegressionMetrics,
     classifier_metrics_stub,
+    classifier_metrics_to_dict,
+    compute_classifier_metrics,
     compute_regression_metrics,
+    direction_labels_from_growth,
     ratio_vs_baseline,
 )
 
@@ -55,6 +59,9 @@ class WalkForwardConfig:
     covid_shock_months: frozenset[date] = DEFAULT_COVID_SHOCK_MONTHS
     # If True, directional accuracy uses sign of MoM growth levels (default).
     growth_already_differenced: bool = True
+    # When unlocked: fit/predict only holdout months (expanding train still uses
+    # all prior rows). Speeds once-per-version holdout burns for expensive models.
+    score_holdout_only: bool = False
 
 
 @dataclass(frozen=True)
@@ -207,6 +214,8 @@ def run_walk_forward(
             raise HoldoutLockedError(
                 f"attempted to score holdout month {target_month} without unlock"
             )
+        if cfg.score_holdout_only and cfg.holdout_unlocked and not is_holdout:
+            continue
 
         train_months = tuple(ref_months[:i])
         as_of_date = _resolve_as_of(target_month, as_of_by_month)
@@ -243,7 +252,7 @@ def run_walk_forward(
     if cfg.exclude_holdout:
         assert_holdout_not_scored(scored_months, holdout, unlocked=cfg.holdout_unlocked)
 
-    metrics = _metrics_from_folds(folds, cfg)
+    metrics = metrics_from_folds(folds, cfg)
     return WalkForwardResult(
         model_name=model_name,
         model_version=model_version,
@@ -254,28 +263,50 @@ def run_walk_forward(
     )
 
 
-def _metrics_from_folds(
+def metrics_from_folds(
     folds: Sequence[FoldPrediction],
     cfg: WalkForwardConfig,
 ) -> MetricBundle:
+    """Build MetricBundle (headline + full + direction classifier) from folds.
+
+    Direction classifier uses sign(actual) vs sign(point) as a Phase 3 default
+    when no dedicated classifier probabilities are attached. Probability for
+    calibration is a crude map from point magnitude via logistic squashing.
+
+    Inputs: fold predictions; WalkForwardConfig.
+    Outputs: MetricBundle.
+    Time allowed to know: actuals already attached on folds (caller enforces).
+    """
     full = _regression_from_folds(list(folds), cfg)
     headline_folds = [f for f in folds if not f.is_covid_shock]
     headline = _regression_from_folds(headline_folds, cfg)
-    stub = classifier_metrics_stub()
+    classifier_dict = _direction_classifier_from_folds(headline_folds)
     return MetricBundle(
         headline=headline,
         full_sample=full,
         vs_baselines_headline=(),
         vs_baselines_full=(),
-        classifier={
-            "available": stub.available,
-            "note": stub.note,
-            "accuracy": stub.accuracy,
-            "precision": stub.precision,
-            "recall": stub.recall,
-            "confusion_matrix": stub.confusion_matrix,
-        },
+        classifier=classifier_dict,
     )
+
+
+def _direction_classifier_from_folds(folds: Sequence[FoldPrediction]) -> dict:
+    """Derive binary direction metrics from MoM growth signs on folds.
+
+    Inputs: folds (typically headline / COVID-excluded).
+    Outputs: classifier dict for MetricBundle.
+    Time allowed to know: fold actuals only.
+    """
+    if not folds:
+        return classifier_metrics_to_dict(classifier_metrics_stub())
+    actual = [f.actual for f in folds]
+    predicted = [f.point for f in folds]
+    y_true = direction_labels_from_growth(actual)
+    y_pred = direction_labels_from_growth(predicted)
+    # Map unbounded point forecast to a pseudo-probability for calibration plot.
+    y_prob = [1.0 / (1.0 + math.exp(-max(min(p * 5.0, 20.0), -20.0))) for p in predicted]
+    metrics = compute_classifier_metrics(y_true, y_pred, y_prob=y_prob)
+    return classifier_metrics_to_dict(metrics)
 
 
 def _regression_from_folds(
@@ -376,6 +407,7 @@ __all__ = [
     "WalkForwardConfig",
     "WalkForwardResult",
     "compare_to_baselines",
+    "metrics_from_folds",
     "run_baseline_suite",
     "run_walk_forward",
 ]

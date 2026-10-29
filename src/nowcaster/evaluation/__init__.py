@@ -1,7 +1,7 @@
 """Walk-forward evaluation harness and skeptic audits.
 
-Phase 2: harness + metrics scaffolding + leakage hooks + holdout lock.
-Phase 3: full model verdicts in docs/evaluation_report.md (not produced here).
+Phase 3: significance tests, classifier metrics, holdout-once protocol,
+leakage collapse audits, and docs/evaluation_report.md verdicts.
 """
 
 from nowcaster.evaluation.baselines_loader import (
@@ -9,7 +9,24 @@ from nowcaster.evaluation.baselines_loader import (
     discover_baseline_factories,
     iter_phase2_baselines,
 )
+from nowcaster.evaluation.candidates import (
+    PHASE3_CANDIDATE_NAMES,
+    PHASE3_DIRECTION_NAMES,
+    PHASE3_REGRESSION_NAMES,
+    direction_candidate_names,
+    discover_candidate_factories,
+    list_expected_vs_registered,
+    regression_candidate_names,
+)
 from nowcaster.evaluation.covid import DEFAULT_COVID_SHOCK_MONTHS, is_covid_shock_month
+from nowcaster.evaluation.holdout_eval import (
+    HoldoutEvalRegistry,
+    append_holdout_log,
+    evaluate_holdout_once,
+    format_holdout_log_row,
+    reset_session_holdout_registry,
+    session_holdout_registry,
+)
 from nowcaster.evaluation.holdout_lock import (
     HOLDOUT_MONTHS,
     HoldoutLockedError,
@@ -19,7 +36,9 @@ from nowcaster.evaluation.holdout_lock import (
 )
 from nowcaster.evaluation.leakage_audit import (
     LeakageAuditResult,
+    permute_feature_rows,
     randomize_as_of_map,
+    run_feature_timing_audit,
     run_leakage_audit_suite,
     run_shuffled_target_audit,
     run_timing_randomize_audit,
@@ -27,20 +46,45 @@ from nowcaster.evaluation.leakage_audit import (
 )
 from nowcaster.evaluation.metrics import (
     BaselineRelativeMetrics,
+    CalibrationBin,
+    ClassifierMetrics,
     ClassifierMetricsStub,
     MetricBundle,
     RegressionMetrics,
+    calibration_reliability,
+    calibration_svg,
     classifier_metrics_stub,
+    classifier_metrics_to_dict,
+    compute_classifier_metrics,
     compute_regression_metrics,
+    direction_labels_from_growth,
     mae,
     ratio_vs_baseline,
     rmse,
+)
+from nowcaster.evaluation.report import (
+    EvaluationReportData,
+    ModelVerdict,
+    build_synthetic_panel,
+    render_evaluation_report_markdown,
+    run_phase3_evaluation,
+    verdict_for_model,
+    write_calibration_plot,
+)
+from nowcaster.evaluation.significance import (
+    BootstrapRMSERatioCI,
+    DieboldMarianoResult,
+    beats_baseline,
+    bootstrap_rmse_ratio_ci,
+    diebold_mariano,
+    squared_error_loss,
 )
 from nowcaster.evaluation.walk_forward import (
     FoldPrediction,
     WalkForwardConfig,
     WalkForwardResult,
     compare_to_baselines,
+    metrics_from_folds,
     run_baseline_suite,
     run_walk_forward,
 )
@@ -49,32 +93,68 @@ __all__ = [
     "DEFAULT_COVID_SHOCK_MONTHS",
     "HOLDOUT_MONTHS",
     "PHASE2_BASELINE_NAMES",
+    "PHASE3_CANDIDATE_NAMES",
+    "PHASE3_DIRECTION_NAMES",
+    "PHASE3_REGRESSION_NAMES",
     "BaselineRelativeMetrics",
+    "BootstrapRMSERatioCI",
+    "CalibrationBin",
+    "ClassifierMetrics",
     "ClassifierMetricsStub",
+    "DieboldMarianoResult",
+    "EvaluationReportData",
     "FoldPrediction",
+    "HoldoutEvalRegistry",
     "HoldoutLockedError",
     "HoldoutWindow",
     "LeakageAuditResult",
     "MetricBundle",
+    "ModelVerdict",
     "RegressionMetrics",
     "WalkForwardConfig",
     "WalkForwardResult",
+    "append_holdout_log",
     "assert_holdout_not_scored",
+    "beats_baseline",
+    "bootstrap_rmse_ratio_ci",
+    "build_synthetic_panel",
+    "calibration_reliability",
+    "calibration_svg",
     "classifier_metrics_stub",
+    "classifier_metrics_to_dict",
     "compare_to_baselines",
+    "compute_classifier_metrics",
     "compute_regression_metrics",
+    "diebold_mariano",
+    "direction_candidate_names",
+    "direction_labels_from_growth",
     "discover_baseline_factories",
+    "discover_candidate_factories",
+    "regression_candidate_names",
+    "evaluate_holdout_once",
+    "format_holdout_log_row",
     "is_covid_shock_month",
     "iter_phase2_baselines",
+    "list_expected_vs_registered",
     "mae",
+    "metrics_from_folds",
+    "permute_feature_rows",
     "randomize_as_of_map",
     "ratio_vs_baseline",
+    "render_evaluation_report_markdown",
+    "reset_session_holdout_registry",
     "resolve_holdout_window",
     "rmse",
     "run_baseline_suite",
+    "run_feature_timing_audit",
     "run_leakage_audit_suite",
+    "run_phase3_evaluation",
     "run_shuffled_target_audit",
     "run_timing_randomize_audit",
     "run_walk_forward",
+    "session_holdout_registry",
     "shuffle_targets",
+    "squared_error_loss",
+    "verdict_for_model",
+    "write_calibration_plot",
 ]

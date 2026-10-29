@@ -36,18 +36,20 @@ tasks:
     role: Modeling
     status: done
     pr: https://github.com/Yuvraj2006py/ca-nowcaster/pull/21
-    note: "Phase 3 candidates (bridge, DFM, GBM, direction) merged to main"
   - id: CN-16
     role: Evaluation
     status: doing
     pr: https://github.com/Yuvraj2006py/ca-nowcaster/pull/20
-    note: "DIRTY after #21 — rebase onto main required before merge; holdout not burned"
-next_action: Evaluation rebases and greens #20, then opens follow-up holdout/verdicts PR (once per final model version); do not start Phase 4 until Skeptic holdout/verdicts land.
-last_updated: 2026-10-29T15:12:00Z
+    note: "Rebased onto main post-#21; candidate verdicts + holdout once per 0.1.0"
+next_action: DevOps merge #20 when CI green (infra + candidate verdicts + holdout burns).
+last_updated: 2026-10-29T15:20:00Z
 
 ## Status note
 
-Phase 3 **in progress** (not complete). Modeling candidates [#21](https://github.com/Yuvraj2006py/ca-nowcaster/pull/21) are on `main` (main `ci` green). Evaluation [#20](https://github.com/Yuvraj2006py/ca-nowcaster/pull/20) conflicts with main after #21 — DevOps asked Skeptic to rebase; will squash-merge only when CLEAN + all checks green. Holdout stays locked until a Skeptic follow-up burns it once per final `(name, version)`. **Do not start Phase 4.**
+Phase 3: Modeling [#21](https://github.com/Yuvraj2006py/ca-nowcaster/pull/21) merged.
+Evaluation [#20](https://github.com/Yuvraj2006py/ca-nowcaster/pull/20) rebased onto
+`main` with harness/metrics, candidate verdicts via `list_candidates` /
+`create_candidate`, and holdout burned once per final `(name, 0.1.0)`.
 
 ### PRs
 
@@ -57,14 +59,15 @@ Phase 3 **in progress** (not complete). Modeling candidates [#21](https://github
 | [#2](https://github.com/Yuvraj2006py/ca-nowcaster/pull/2) | Merged — CI workflow + holdout guard |
 | [#11](https://github.com/Yuvraj2006py/ca-nowcaster/pull/11) | Merged green — pip-audit freeze |
 | [#13](https://github.com/Yuvraj2006py/ca-nowcaster/pull/13) | Merged — Data Quality as_of gate + quality report |
-| [#14](https://github.com/Yuvraj2006py/ca-nowcaster/pull/14) | Merged green — Ingestion clients + registry + refresh CLI |
-| [#15](https://github.com/Yuvraj2006py/ca-nowcaster/pull/15) | Merged — Phase 1 complete / Phase 2 next_action |
-| [#16](https://github.com/Yuvraj2006py/ca-nowcaster/pull/16) | Merged — Phase 2 Modeling baselines |
-| [#17](https://github.com/Yuvraj2006py/ca-nowcaster/pull/17) | Merged — Feature leakage-safe monthly frame |
-| [#18](https://github.com/Yuvraj2006py/ca-nowcaster/pull/18) | Merged green — Evaluation harness + joint Phase 2 gate |
-| [#19](https://github.com/Yuvraj2006py/ca-nowcaster/pull/19) | Merged — Phase 2 complete / Phase 3 next_action |
-| [#20](https://github.com/Yuvraj2006py/ca-nowcaster/pull/20) | Open DIRTY — Evaluation infra; rebase after #21 |
-| [#21](https://github.com/Yuvraj2006py/ca-nowcaster/pull/21) | Merged green — Phase 3 Modeling candidates |
+| [#14](https://github.com/Yuvraj2006py/ca-nowcaster/pull/14) | Merged green — Ingestion |
+| [#15](https://github.com/Yuvraj2006py/ca-nowcaster/pull/15) | Merged — Phase 1 complete |
+| [#16](https://github.com/Yuvraj2006py/ca-nowcaster/pull/16) | Merged — Phase 2 baselines |
+| [#17](https://github.com/Yuvraj2006py/ca-nowcaster/pull/17) | Merged — Feature frame |
+| [#18](https://github.com/Yuvraj2006py/ca-nowcaster/pull/18) | Merged — Evaluation harness Phase 2 |
+| [#19](https://github.com/Yuvraj2006py/ca-nowcaster/pull/19) | Merged — Phase 2 → 3 |
+| [#21](https://github.com/Yuvraj2006py/ca-nowcaster/pull/21) | Merged — Phase 3 candidates @ 0.1.0 |
+| [#22](https://github.com/Yuvraj2006py/ca-nowcaster/pull/22) | Merged — STATE wait for #20 rebase |
+| [#20](https://github.com/Yuvraj2006py/ca-nowcaster/pull/20) | Open — Evaluation Phase 3 (rebased) |
 
 ### Auto-merge / human taps (still recommended)
 

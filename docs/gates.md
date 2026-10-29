@@ -43,3 +43,17 @@ Honest-result rule: if no model beats the baseline, v1 still ships.
 - [x] COVID headline/full metric variants; leakage audit hooks; holdout lock docs
 - [x] Joint gate: Feature leakage tests + `build_features` → baselines → walk-forward
   (`tests/gates/test_phase_2.py`)
+
+## Phase 3 checklist
+
+- [x] Modeling candidates registered (`list_candidates` / `create_candidate`) @ 0.1.0 (#21)
+- [x] Expanding-window walk-forward with COVID headline vs full-sample metrics (Evaluation)
+- [x] RMSE/MAE ratios, directional accuracy, 80%/95% coverage (Evaluation)
+- [x] Classifier metrics: confusion / precision / recall / F1 + calibration plot (Evaluation)
+- [x] Diebold-Mariano + bootstrap CI on RMSE ratios (Evaluation)
+- [x] Leakage audits: shuffled targets + feature-timing scramble (Evaluation)
+- [x] Holdout once-per-version API (`evaluate_holdout_once`, `score_holdout_only`)
+- [x] `docs/evaluation_report.md` with plain-language verdicts (honest-result rule)
+- [x] `tests/gates/test_phase_3.py`
+- [x] Holdout touched once per final candidate version (`bridge`, `dynamic_factor`,
+  `gradient_boosting`, `direction_classifier`, `direction_boosting` @ 0.1.0)

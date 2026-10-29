@@ -5,7 +5,9 @@ from __future__ import annotations
 import numpy as np
 
 from nowcaster.evaluation.metrics import (
+    calibration_svg,
     classifier_metrics_stub,
+    compute_classifier_metrics,
     compute_regression_metrics,
     directional_accuracy,
     interval_coverage,
@@ -62,4 +64,21 @@ def test_classifier_stub_unavailable() -> None:
     stub = classifier_metrics_stub()
     assert stub.available is False
     assert stub.accuracy is None
-    assert "Phase 3" in stub.note
+    assert "classifier" in stub.note.lower()
+
+
+def test_classifier_metrics_and_calibration() -> None:
+    y_true = [0, 0, 1, 1, 1, 0]
+    y_pred = [0, 1, 1, 1, 0, 0]
+    y_prob = [0.1, 0.6, 0.8, 0.9, 0.4, 0.2]
+    m = compute_classifier_metrics(y_true, y_pred, y_prob=y_prob, n_calibration_bins=5)
+    assert m.available is True
+    assert m.n == 6
+    assert m.confusion_matrix == ((2, 1), (1, 2))
+    assert m.precision == 2 / 3
+    assert m.recall == 2 / 3
+    assert m.f1 is not None
+    assert m.calibration_bins
+    svg = calibration_svg(m.calibration_bins)
+    assert svg.startswith("<svg")
+    assert "circle" in svg
