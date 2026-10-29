@@ -1,4 +1,4 @@
-phase: 3
+phase: 4
 tasks:
   - id: CN-1
     role: human
@@ -36,16 +36,31 @@ tasks:
     role: Modeling
     status: done
     pr: https://github.com/Yuvraj2006py/ca-nowcaster/pull/21
+    note: "Phase 3 candidates (bridge, DFM, GBM, direction) merged to main"
   - id: CN-16
     role: Evaluation
     status: done
     pr: https://github.com/Yuvraj2006py/ca-nowcaster/pull/20
-next_action: Start Phase 4 — Live Pipeline, Dashboard, and Security review; do not start Phase 5 docs/ship until Phase 4 gate passes.
-last_updated: 2026-10-29T15:30:00Z
+    note: "Candidate verdicts + holdout burns @ 0.1.0; production_model hint ar1"
+  - id: CN-19
+    role: Security
+    status: doing
+    pr: https://github.com/Yuvraj2006py/ca-nowcaster/pull/24
+    note: "Phase 4 security review + CI/config harden; docs/security_review.md; rebased onto main post-#23"
+  - id: CN-17
+    role: Live Pipeline
+    status: doing
+    pr: null
+  - id: CN-18
+    role: Dashboard
+    status: doing
+    pr: null
+next_action: Merge Security/Live/Dashboard Phase 4 PRs when CI green; Security re-checks live workflow + dashboard after those land.
+last_updated: 2026-10-29T15:45:00Z
 
 ## Status note
 
-Phase 3 is **complete** on `main`: Modeling candidates (#21) and Evaluation Skeptic report with candidate verdicts + holdout burns once per final `(name, 0.1.0)` (#20) are merged. Post-merge `ci` on `main` after #20 is **green**. Phase field stays `3` until Orchestrator formally opens Phase 4; prerequisite for Phase 4 is met.
+Phase 3 is **complete** on `main` (#21 + #20; post-merge `ci` green). Phase 4 **in progress**. Security (Role 8) PR [#24](https://github.com/Yuvraj2006py/ca-nowcaster/pull/24): `docs/security_review.md`, failure-mode recovery doc, CI hardenings, and `docs/requests/` for Ingestion/Live/Dashboard. Live and Dashboard still stubs on main — Security will re-check those surfaces after they land.
 
 ### PRs
 
@@ -64,6 +79,8 @@ Phase 3 is **complete** on `main`: Modeling candidates (#21) and Evaluation Skep
 | [#21](https://github.com/Yuvraj2006py/ca-nowcaster/pull/21) | Merged — Phase 3 candidates @ 0.1.0 |
 | [#22](https://github.com/Yuvraj2006py/ca-nowcaster/pull/22) | Merged — STATE wait for #20 |
 | [#20](https://github.com/Yuvraj2006py/ca-nowcaster/pull/20) | Merged green — Skeptic verdicts + holdout burns |
+| [#23](https://github.com/Yuvraj2006py/ca-nowcaster/pull/23) | Merged — Phase 3 complete; next_action Phase 4 |
+| [#24](https://github.com/Yuvraj2006py/ca-nowcaster/pull/24) | Open — Security Phase 4 review + CI harden (rebased) |
 
 ### Auto-merge / human taps (still recommended)
 
