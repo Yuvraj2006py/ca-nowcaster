@@ -16,7 +16,7 @@ tasks:
     role: Ingestion
     status: doing
     pr: https://github.com/Yuvraj2006py/ca-nowcaster/pull/14
-    note: "PR open — StatCan+Valet clients, verified registry, refresh CLI; await CI"
+    note: "PR open, CI green — ready to merge when Orchestrator/DevOps approve"
   - id: CN-10
     role: Data Quality
     status: done
