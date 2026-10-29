@@ -42,9 +42,7 @@ def test_policy_rate_observations(client: BocValetClient) -> None:
     detail, obs = client.get_observations("STATIC_ATABLE_V39079", recent=3)
     assert "overnight rate" in detail["label"].lower()
     assert len(obs) == 3
-    date_str, value = BocValetClient.parse_observation_value(
-        obs[0], "STATIC_ATABLE_V39079"
-    )
+    date_str, value = BocValetClient.parse_observation_value(obs[0], "STATIC_ATABLE_V39079")
     assert date_str.startswith("20")
     assert isinstance(value, float)
 

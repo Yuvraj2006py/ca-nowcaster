@@ -100,9 +100,7 @@ class BocValetClient:
         return detail
 
     @staticmethod
-    def parse_observation_value(
-        observation: dict[str, Any], series_name: str
-    ) -> tuple[str, float]:
+    def parse_observation_value(observation: dict[str, Any], series_name: str) -> tuple[str, float]:
         """Extract (date_str, value) from one Valet observation row.
 
         Inputs: raw observation dict and series name key.
@@ -114,9 +112,7 @@ class BocValetClient:
             raise BocValetError(f"Observation missing date: {observation}")
         cell = observation.get(series_name)
         if not isinstance(cell, dict) or "v" not in cell:
-            raise BocValetError(
-                f"Observation missing value for {series_name}: {observation}"
-            )
+            raise BocValetError(f"Observation missing value for {series_name}: {observation}")
         raw = cell.get("v")
         if raw is None or raw == "":
             raise BocValetError(f"Empty Valet value for {series_name} on {date_str}")

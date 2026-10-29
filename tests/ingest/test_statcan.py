@@ -25,9 +25,7 @@ def client(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> StatCanClient:
 
     mapping = {
         ("POST", "getCubeMetadata"): _load("statcan_cube_36100434.json"),
-        ("POST", "getDataFromVectorsAndLatestNPeriods"): _load(
-            "statcan_latest_65201210.json"
-        ),
+        ("POST", "getDataFromVectorsAndLatestNPeriods"): _load("statcan_latest_65201210.json"),
         ("POST", "getBulkVectorDataByRange"): _load("statcan_bulk_65201210.json"),
         ("POST", "getSeriesInfoFromCubePidCoord"): _load("statcan_series_info_gdp.json"),
         ("GET", "getChangedSeriesList"): _load("statcan_changed_series_list.json"),
@@ -66,9 +64,7 @@ def test_latest_n(client: StatCanClient) -> None:
 
 
 def test_bulk_range(client: StatCanClient) -> None:
-    data = client.get_bulk_range(
-        [65201210], "2020-01-01T00:00", "2026-10-29T00:00"
-    )
+    data = client.get_bulk_range([65201210], "2020-01-01T00:00", "2026-10-29T00:00")
     assert 65201210 in data
     assert len(data[65201210]) == 6
     assert data[65201210][0]["refPer"].startswith("1997")

@@ -56,9 +56,7 @@ def main(argv: list[str] | None = None) -> int:
     configure_logging(args.log_level)
 
     if args.twice:
-        first, second = run_double_refresh(
-            registry_path=args.registry, store_path=args.store
-        )
+        first, second = run_double_refresh(registry_path=args.registry, store_path=args.store)
         print(
             f"first: inserted={first.total_inserted} skipped={first.total_skipped} "
             f"rows={first.total_rows_after}"

@@ -139,9 +139,7 @@ def refresh_all(
     finally:
         store.close()
 
-    summary = RefreshSummary(
-        results=results, store_path=str(store.path), total_rows_after=total
-    )
+    summary = RefreshSummary(results=results, store_path=str(store.path), total_rows_after=total)
     logger.info(
         "Refresh complete: series=%s fetched=%s inserted=%s skipped=%s store_rows=%s path=%s",
         len(results),

@@ -86,9 +86,7 @@ def _parse_entry(item: dict[str, Any], *, idx: int) -> SeriesDefinition:
 
     if source == "statcan":
         if not table_id or not vector_id:
-            raise RegistryError(
-                f"series[{idx}] statcan entries require table_id and vector_id"
-            )
+            raise RegistryError(f"series[{idx}] statcan entries require table_id and vector_id")
         if valet_series not in (None, ""):
             raise RegistryError(f"series[{idx}] statcan entry must have valet_series: null")
         valet_series = None
@@ -96,9 +94,7 @@ def _parse_entry(item: dict[str, Any], *, idx: int) -> SeriesDefinition:
         if not valet_series:
             raise RegistryError(f"series[{idx}] boc_valet entries require valet_series")
         if table_id not in (None, "") or vector_id not in (None, ""):
-            raise RegistryError(
-                f"series[{idx}] boc_valet entry must have table_id/vector_id null"
-            )
+            raise RegistryError(f"series[{idx}] boc_valet entry must have table_id/vector_id null")
         table_id = None
         vector_id = None
 

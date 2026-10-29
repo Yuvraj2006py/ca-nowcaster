@@ -132,9 +132,7 @@ class RawStore:
         after = self.count_rows()
         inserted = after - before
         skipped = attempted - inserted
-        return InsertResult(
-            attempted=attempted, inserted=inserted, skipped_duplicates=skipped
-        )
+        return InsertResult(attempted=attempted, inserted=inserted, skipped_duplicates=skipped)
 
     def count_rows(self) -> int:
         assert self._conn is not None

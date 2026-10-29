@@ -40,17 +40,11 @@ def fixture_session(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> RateLimi
     return session
 
 
-def test_refresh_twice_no_duplicates(
-    tmp_path: Path, fixture_session: RateLimitedSession
-) -> None:
+def test_refresh_twice_no_duplicates(tmp_path: Path, fixture_session: RateLimitedSession) -> None:
     store_path = tmp_path / "raw.duckdb"
     registry = FIXTURES / "mini_registry.yaml"
-    first = refresh_all(
-        registry_path=registry, store_path=store_path, session=fixture_session
-    )
-    second = refresh_all(
-        registry_path=registry, store_path=store_path, session=fixture_session
-    )
+    first = refresh_all(registry_path=registry, store_path=store_path, session=fixture_session)
+    second = refresh_all(registry_path=registry, store_path=store_path, session=fixture_session)
     assert first.total_fetched > 0
     assert first.total_inserted > 0
     assert second.total_inserted == 0

@@ -63,9 +63,7 @@ class StatCanClient:
             raise StatCanError(f"Missing cube object for {pid}")
         return obj
 
-    def get_series_info_from_coord(
-        self, product_id: int | str, coordinate: str
-    ) -> dict[str, Any]:
+    def get_series_info_from_coord(self, product_id: int | str, coordinate: str) -> dict[str, Any]:
         """Resolve vector metadata from cube product ID + coordinate.
 
         Inputs: productId and 10-part coordinate string (e.g. '1.1.1.1.0.0.0.0.0.0').
