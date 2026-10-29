@@ -1,19 +1,25 @@
 # Streamlit Community Cloud deploy (human taps)
 
-The dashboard code ships in-repo. **Public hosting needs a one-time human
-deploy** — agents cannot complete this step. Do not block the Dashboard PR on
-a live URL.
+The dashboard code ships in-repo (`streamlit_app.py` → `nowcaster.app.streamlit_app`).
+**Public hosting needs a one-time human deploy** — agents cannot complete this step.
+Do not block Documentation / Phase 5 on a live URL. Until Cloud is live, run locally:
 
-App entrypoint: `streamlit_app.py` (repo root) → `nowcaster.app.streamlit_app`.
-The page reads stored logs only (or bundled fixtures). No secrets required for v1.
+```bash
+pip install -e ".[dev]"
+streamlit run streamlit_app.py
+```
 
-## Tap-by-tap
+The page reads stored prediction/score logs only (or bundled fixtures if logs are
+empty). No secrets required for v1. Production model label: **AR(1)** (honest Phase 3
+result — see `docs/evaluation_report.md`).
+
+## Tap-by-tap (Community Cloud)
 
 1. Open [https://share.streamlit.io/](https://share.streamlit.io/) and sign in
    with the GitHub account that owns `Yuvraj2006py/ca-nowcaster`.
 2. Click **Create app** (or **New app**).
 3. **Repository:** `Yuvraj2006py/ca-nowcaster`
-4. **Branch:** `main` (after the Dashboard PR merges)
+4. **Branch:** `main` (after Phase 4/5 docs merge)
 5. **Main file path:** `streamlit_app.py`
 6. **App URL** (optional): e.g. `ca-nowcaster` →
    `https://ca-nowcaster.streamlit.app`
@@ -22,9 +28,9 @@ The page reads stored logs only (or bundled fixtures). No secrets required for v
 9. Click **Deploy**. Wait for the build to finish (pip install from
    `pyproject.toml`).
 10. Open the public URL. You should see either live logged nowcasts or the
-    **sample logs** banner if `data/logs/` is empty on the Cloud host.
-11. Paste the public URL into `STATE.md` under human taps / dashboard URL so
-    Documentation can link it from the README.
+    **sample logs** banner if prediction/score logs are empty on the Cloud host.
+11. Paste the public URL into `STATE.md` (human taps / dashboard URL) and optionally
+    the README “Public dashboard” section so recruiters can click through.
 
 ## Optional: point Cloud at live logs later
 

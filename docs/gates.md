@@ -57,3 +57,20 @@ Honest-result rule: if no model beats the baseline, v1 still ships.
 - [x] `tests/gates/test_phase_3.py`
 - [x] Holdout touched once per final candidate version (`bridge`, `dynamic_factor`,
   `gradient_boosting`, `direction_classifier`, `direction_boosting` @ 0.1.0)
+
+## Phase 4 checklist
+
+- [x] Security review + failure modes (`docs/security_review.md`, `docs/failure_modes.md`)
+- [x] Streamlit dashboard from stored logs (`src/nowcaster/app/`, `streamlit_app.py`)
+- [x] Human Cloud deploy doc (`docs/streamlit_deploy.md`) — URL is a human tap, not a gate
+- [x] Scheduled live predict/score with AR(1) production (`src/nowcaster/live/`)
+
+## Phase 5 checklist
+
+- [x] README: problem, honest result, architecture, how to run, limits
+- [x] Model card (`docs/model_card.md`)
+- [x] Interview notes (`docs/interview_notes.md`) including three resume bullets
+  using only numbers from `docs/evaluation_report.md`
+- [x] `STATE.md` final summary at top; Phase 5 done
+- [x] Streamlit deploy taps kept current (`docs/streamlit_deploy.md`)
+- [x] Gate tests (`tests/gates/test_phase_5.py`)
