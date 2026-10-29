@@ -25,3 +25,16 @@
 ## Out of scope for Security
 
 Security will not implement live jobs; will re-review the workflow YAML when opened.
+
+## Response (Live Pipeline, 2026-10-29)
+
+Addressed in [#26](https://github.com/Yuvraj2006py/ca-nowcaster/pull/26):
+
+1. Refresh via `refresh_all` / store uniqueness; ingest failure → skip predict +
+   `logs/failures.jsonl` (+ optional GitHub issue).
+2. Predict idempotent on `(target_ref_month, model_name, model_version)`.
+3. Score append-only on `prediction_id`.
+4. Workflows SHA-pinned; default `permissions: contents: read`; write only on
+   the commit job; `NOWCASTER_HTTP_CACHE=0`; job timeouts set.
+5. Aligned with `docs/failure_modes.md` / `docs/live_pipeline.md`.
+6. Failed-API simulation covered in `tests/live/test_dry_run.py`.

@@ -1,5 +1,6 @@
 # Scheduled scoring: when official GDP MoM appears, append logs/scores.csv.
-# Does not modify ci.yml. See docs/requests/devops-live-pipeline-workflows.md.
+# Does not modify ci.yml. Aligns with docs/failure_modes.md +
+# docs/requests/live-idempotent-jobs-and-recovery.md.
 name: live-score
 
 on:
@@ -9,7 +10,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: live-score
@@ -20,6 +21,8 @@ jobs:
     name: score-released-actuals
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    permissions:
+      contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -32,7 +35,7 @@ jobs:
 
       - name: Install package
         run: |
-          python -m pip install --upgrade pip
+          python -m pip install --upgrade "pip==25.0.1"
           pip install -e .
 
       - name: Refresh store (actuals) then score
@@ -40,6 +43,7 @@ jobs:
           RAW_STORE_PATH: data/raw.duckdb
           PREDICTION_LOG_PATH: logs/predictions.csv
           SCORE_LOG_PATH: logs/scores.csv
+          NOWCASTER_HTTP_CACHE: "0"
           LOG_LEVEL: INFO
         run: |
           nowcaster-ingest-refresh --store data/raw.duckdb || {

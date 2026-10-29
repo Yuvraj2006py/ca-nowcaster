@@ -37,6 +37,24 @@ def test_append_prediction_and_reject_duplicate(tmp_path: Path) -> None:
     with pytest.raises(ValueError, match="already logged"):
         append_prediction(path, entry)
 
+    # Different model version for same month is allowed (append-only, new key).
+    other = PredictionLogEntry(
+        prediction_id=make_prediction_id(target_ref_month=date(2022, 12, 1), predicted_at=clock),
+        target_ref_month=date(2022, 12, 1),
+        predicted_at=clock,
+        model_name="ar1",
+        model_version="0.2.0",
+        features_hash="abc",
+        point=0.002,
+        lower_80=-0.01,
+        upper_80=0.01,
+        lower_95=-0.02,
+        upper_95=0.02,
+        direction_beat_prev=False,
+    )
+    append_prediction(path, other)
+    assert len(load_prediction_log(path)) == 2
+
 
 def test_score_prediction_metrics(tmp_path: Path) -> None:
     clock = datetime(2023, 2, 28, 16, 0, 0, tzinfo=UTC)

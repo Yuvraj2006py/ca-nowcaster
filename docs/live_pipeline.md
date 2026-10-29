@@ -32,6 +32,16 @@ Actions workflows commit those files with a UTC timestamp in the commit message
 so the public git history is the audit trail (`predicted_at` / `scored_at` are
 also stored in each row).
 
+## Idempotency (Security H1 / failure_modes)
+
+- Predict skips if `(target_ref_month, model_name, model_version)` is already
+  logged (append-only; no rewrite).
+- Score skips if `prediction_id` is already scored.
+- Ingest uses store vintage uniqueness; total refresh failure → skip predict
+  (never forecast on stale data) and optionally open a `BLOCKED` issue.
+- Scheduled runners set `NOWCASTER_HTTP_CACHE=0`. Workflow default
+  `permissions: contents: read`; write only on the job that commits logs.
+
 ## Failure handling
 
 If ingestion fails (or `--simulate-ingest-failure`):

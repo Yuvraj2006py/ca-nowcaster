@@ -66,19 +66,25 @@ def append_prediction(
     Inputs: log path; PredictionLogEntry; duplicate-month policy.
     Outputs: the appended entry (unchanged).
     Time allowed to know: entry fields only; does not look at future actuals.
-    Raises: ValueError if the same target_ref_month already has a prediction
-            and allow_duplicate_month is False.
+    Raises: ValueError if the same (target_ref_month, model_name, model_version)
+            is already logged and allow_duplicate_month is False (idempotent
+            double-run policy per docs/failure_modes.md).
     """
     file_path = Path(path)
     file_path.parent.mkdir(parents=True, exist_ok=True)
     existing = load_prediction_log(file_path)
     month_key = entry.target_ref_month.isoformat()
     if not allow_duplicate_month and not existing.empty:
-        months = existing["target_ref_month"].astype(str)
-        if (months == month_key).any():
+        dup = (
+            (existing["target_ref_month"].astype(str) == month_key)
+            & (existing["model_name"].astype(str) == entry.model_name)
+            & (existing["model_version"].astype(str) == entry.model_version)
+        )
+        if bool(dup.any()):
             raise ValueError(
-                f"prediction already logged for target_ref_month={month_key}; "
-                "refusing to overwrite (append-only public record)"
+                f"prediction already logged for "
+                f"(target_ref_month={month_key}, model={entry.model_name}"
+                f"@{entry.model_version}); refusing to overwrite (append-only)"
             )
 
     row = entry_to_row(entry)
