@@ -10,43 +10,30 @@ tasks:
     pr: https://github.com/Yuvraj2006py/ca-nowcaster/pull/1
   - id: CN-3
     role: DevOps
-    status: doing
+    status: done
     pr: https://github.com/Yuvraj2006py/ca-nowcaster/pull/11
-next_action: After PR #11 merges and `ci` is green on main, start Phase 1 — Ingestion + Data Quality (Roles 1–2); do not start features or models.
-last_updated: 2026-10-29T13:20:00Z
+next_action: Start Phase 1 — Ingestion + Data Quality (Roles 1–2); do not start features or models until Phase 1 gate passes.
+last_updated: 2026-10-29T13:38:00Z
 
 ## Status note
 
-- PR #1 Phase 0 skeleton: **merged**
-- PR #2 CI workflow: **merged** early; first `pip-audit` failure was editable-collection (`--strict --skip-editable`). Checks were **not** loosened.
-- PR #11 attempt 1: freeze `--exclude-editable` (fixed collection). Attempt 2 (same PR): bump pins so pip-audit is green — `requests`, `python-dotenv`, `streamlit`, `pytest`, explicit `pillow==13.0.0`. Different root cause than attempt 1 (real vulns, not loosened).
-- Dependabot PRs #3–#10: leave until `ci` is green on main; several overlap these bumps.
+Phase 0 skeleton (PR #1) and CI (PR #2 + green fix PR #11) are on `main`. Latest `ci` workflow on `main` is **green** (run after #11). Phase field stays `0` until Orchestrator formally opens Phase 1; the Phase 0+CI prerequisite for starting Phase 1 is met.
 
-Phase remains **0** until `main` has Phase 0 + **green** CI.
+### PRs
 
-## Human taps required
+| PR | Result |
+|----|--------|
+| [#1](https://github.com/Yuvraj2006py/ca-nowcaster/pull/1) | Merged — Phase 0 skeleton |
+| [#2](https://github.com/Yuvraj2006py/ca-nowcaster/pull/2) | Merged early (red briefly) — CI workflow + holdout guard |
+| [#11](https://github.com/Yuvraj2006py/ca-nowcaster/pull/11) | Merged green — pip-audit freeze + secure pins |
+| #3–#10 | Dependabot; review after Phase 1 kickoff as needed |
 
-Repo `allow_auto_merge` is **false**. Do not merge red PRs.
+### Auto-merge / human taps (still recommended)
 
-### A. Enable auto-merge (one-time)
+Repo `allow_auto_merge` was **false** during DevOps work; merges happened without agent-enabled auto-merge. To harden for later phases:
 
-1. https://github.com/Yuvraj2006py/ca-nowcaster/settings
-2. **General** → **Pull Requests** → **Allow auto-merge**
-3. Keep squash merging enabled
-4. **Actions** → **General** → allow GitHub Actions to create and approve PRs
+1. https://github.com/Yuvraj2006py/ca-nowcaster/settings → **Allow auto-merge**
+2. Branch ruleset on `main`: require PR + require status check **`ci`** + block force pushes (prevents merging before green)
+3. Actions: allow GitHub Actions to create/approve PRs (Dependabot)
 
-### B. Branch protection on `main` (one-time — prevents merging before green)
-
-1. **Settings** → **Rules** → **Rulesets** (or **Branches**)
-2. Require a pull request before merging
-3. Require status checks to pass; require check name **`ci`**
-4. Block force pushes and deletions
-
-### C. Merge PR #11 when green
-
-1. Open https://github.com/Yuvraj2006py/ca-nowcaster/pull/11
-2. Wait for green **`ci`** / **`lint-test-security`** / **`holdout-guard`**
-3. Squash-merge (or enable auto-merge if A is done)
-4. Confirm a subsequent push/`ci` run on `main` is green
-
-If PR #11 CI fails again for the same pip-audit cause after this fix, open a GitHub issue `BLOCKED: CI pip-audit` and set CN-3 to BLOCKED (see `docs/ci-failure-handling.md`).
+DevOps will not start ingestion, features, or models.
