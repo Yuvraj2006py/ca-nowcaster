@@ -46,26 +46,28 @@ tasks:
     role: Security
     status: done
     pr: https://github.com/Yuvraj2006py/ca-nowcaster/pull/24
-    note: "security_review + CI harden merged; re-check dashboard after #25 lands"
+    note: "security_review + CI harden merged"
   - id: CN-18
     role: Dashboard
     status: done
     pr: https://github.com/Yuvraj2006py/ca-nowcaster/pull/25
-    note: "Rebased onto main+#24; DevOps ping ready; Cloud URL needs human"
+    note: "Streamlit dashboard on main; Cloud URL needs human"
   - id: CN-17
     role: Live Pipeline
     status: doing
-    pr: null
-next_action: DevOps squash-merge Dashboard #25 when CI green; Live Pipeline write prediction/score logs; human Streamlit Cloud deploy per docs/streamlit_deploy.md; Security re-check dashboard after merge.
-last_updated: 2026-10-29T15:42:00Z
+    pr: https://github.com/Yuvraj2006py/ca-nowcaster/pull/26
+    note: "AR(1) production; rebased onto main post-#24+#25; awaiting DevOps merge"
+next_action: DevOps squash-merge Live Pipeline #26 when CI green (final Phase 4 code PR); human Streamlit Cloud deploy per docs/streamlit_deploy.md.
+last_updated: 2026-10-29T15:55:00Z
 
 ## Status note
 
 Phase 3 complete on `main` (#20 / #21 / #23). Honest result: **no candidate beats
 AR(1)**. Phase 4: Security [#24](https://github.com/Yuvraj2006py/ca-nowcaster/pull/24)
-merged. Dashboard [#25](https://github.com/Yuvraj2006py/ca-nowcaster/pull/25) reads
-prediction/score logs only (fixture fallback); rebased onto main post-#24.
-Public Streamlit URL is a **human** step — do not block the Dashboard PR on deploy.
+and Dashboard [#25](https://github.com/Yuvraj2006py/ca-nowcaster/pull/25) **merged**.
+Live Pipeline [#26](https://github.com/Yuvraj2006py/ca-nowcaster/pull/26) rebased onto
+post-#25 `main` — production model **AR(1) @ 0.1.0**; scheduled predict/score + dry-run.
+Public Streamlit URL remains a **human** step (`docs/streamlit_deploy.md`).
 
 ### PRs
 
@@ -86,7 +88,8 @@ Public Streamlit URL is a **human** step — do not block the Dashboard PR on de
 | [#20](https://github.com/Yuvraj2006py/ca-nowcaster/pull/20) | Merged green — Skeptic verdicts + holdout burns |
 | [#23](https://github.com/Yuvraj2006py/ca-nowcaster/pull/23) | Merged — Phase 3 complete; next_action Phase 4 |
 | [#24](https://github.com/Yuvraj2006py/ca-nowcaster/pull/24) | Merged — Security Phase 4 review + CI harden |
-| [#25](https://github.com/Yuvraj2006py/ca-nowcaster/pull/25) | Open — Dashboard Streamlit (rebased onto main+#24) |
+| [#25](https://github.com/Yuvraj2006py/ca-nowcaster/pull/25) | Merged — Dashboard Streamlit |
+| [#26](https://github.com/Yuvraj2006py/ca-nowcaster/pull/26) | Open — Live Pipeline Phase 4 (AR(1); rebased post-#25) |
 
 ### Human taps — Streamlit Community Cloud (Dashboard)
 
@@ -103,3 +106,5 @@ Exact steps: **`docs/streamlit_deploy.md`**. Short version:
 1. https://github.com/Yuvraj2006py/ca-nowcaster/settings → **Allow auto-merge**
 2. Branch ruleset on `main`: require PR + require status check **`ci`** + block force pushes
 3. Actions: allow GitHub Actions to create/approve PRs (Dependabot)
+4. Live pipeline workflows need `contents: write` + `issues: write` on schedule
+   (see `docs/requests/devops-live-pipeline-workflows.md`)
