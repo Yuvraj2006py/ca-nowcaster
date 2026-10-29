@@ -32,7 +32,10 @@ Honest-result rule: if no model beats the baseline, v1 still ships.
 
 ## Phase 2 checklist
 
-- [ ] Leakage-safe `build_features(as_of_date)` + feature summary (Feature)
+- [x] Leakage-safe `build_features(as_of_date)` + `features_hash` (`src/nowcaster/features/`; Feature)
+- [x] MoM / YoY / log-diff / rolling / lags + ragged-edge strategies (carry, AR1, leave_missing)
+- [x] Feature leakage nesting tests + Feature-half gate (`tests/gates/test_phase_2.py`)
+- [x] Feature summary table (`docs/feature_summary.md`)
 - [x] Baselines only: `last_value`, `ar1`, `rolling_mean` implementing `NowcastModel` (Modeling)
 - [x] Registry (`create_baseline` / `iter_baselines`) so Evaluation runs baselines without editing model bodies (Modeling)
 - [x] One-page plain-language docs per baseline under `docs/models/` (Modeling)
