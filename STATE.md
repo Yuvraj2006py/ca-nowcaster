@@ -12,15 +12,15 @@ tasks:
     role: DevOps
     status: doing
     pr: https://github.com/Yuvraj2006py/ca-nowcaster/pull/11
-next_action: After pip-audit fix PR merges and `ci` is green on main, start Phase 1 — Ingestion + Data Quality (Roles 1–2); do not start features or models.
-last_updated: 2026-10-29T13:16:00Z
+next_action: After PR #11 merges and `ci` is green on main, start Phase 1 — Ingestion + Data Quality (Roles 1–2); do not start features or models.
+last_updated: 2026-10-29T13:20:00Z
 
 ## Status note
 
 - PR #1 Phase 0 skeleton: **merged**
-- PR #2 CI workflow: **merged** while `lint-test-security` was still running; `pip-audit` then failed on main (`--strict --skip-editable` treats the editable local dist as a collection failure). Checks were **not** loosened.
-- PR #11: fix-forward for pip-audit (freeze `--exclude-editable` + audit with `--strict --no-deps`). This is CI fix attempt **1** for that root cause.
-- Dependabot opened PRs #3–#10 after workflows landed; leave them until `ci` is green on main and review separately.
+- PR #2 CI workflow: **merged** early; first `pip-audit` failure was editable-collection (`--strict --skip-editable`). Checks were **not** loosened.
+- PR #11 attempt 1: freeze `--exclude-editable` (fixed collection). Attempt 2 (same PR): bump pins so pip-audit is green — `requests`, `python-dotenv`, `streamlit`, `pytest`, explicit `pillow==13.0.0`. Different root cause than attempt 1 (real vulns, not loosened).
+- Dependabot PRs #3–#10: leave until `ci` is green on main; several overlap these bumps.
 
 Phase remains **0** until `main` has Phase 0 + **green** CI.
 
