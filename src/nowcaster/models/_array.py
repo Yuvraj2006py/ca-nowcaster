@@ -72,3 +72,95 @@ def residual_std(residuals: np.ndarray) -> float:
     if residuals.size < 2:
         return 0.0
     return float(np.std(residuals, ddof=1))
+
+
+def to_2d_float(X: Any, *, name: str = "X") -> np.ndarray:
+    """Coerce a feature matrix to a 2-d float64 numpy array.
+
+    Inputs: X as DataFrame, ndarray, or nested sequence.
+    Outputs: shape (n, p) float64 array (NaNs preserved for imputers / DFM).
+    Time allowed to know: values present in X only (caller enforces as_of).
+    """
+    if X is None:
+        raise ValueError(f"{name} must not be None")
+    if hasattr(X, "to_numpy"):
+        arr = np.asarray(X.to_numpy(), dtype=np.float64)
+    else:
+        arr = np.asarray(X, dtype=np.float64)
+
+    if arr.ndim == 1:
+        arr = arr.reshape(-1, 1)
+    if arr.ndim != 2:
+        raise ValueError(f"{name} must be 2-d, got shape {arr.shape}")
+    return arr
+
+
+def require_feature_matrix(X: Any, *, name: str = "X", min_cols: int = 1) -> np.ndarray:
+    """Validate that X has at least ``min_cols`` feature columns.
+
+    Inputs: feature matrix; minimum column count (Phase 3 candidates need >= 1).
+    Outputs: 2-d float64 array.
+    Time allowed to know: structure of X only beyond values passed in.
+    """
+    arr = to_2d_float(X, name=name)
+    if arr.shape[1] < min_cols:
+        raise ValueError(f"{name} needs at least {min_cols} feature column(s), got {arr.shape[1]}")
+    return arr
+
+
+def column_names(X: Any, n_cols: int) -> list[str]:
+    """Return column names for X, or synthetic names when absent.
+
+    Inputs: feature matrix; column count.
+    Outputs: list of length n_cols.
+    Time allowed to know: column labels only.
+    """
+    if hasattr(X, "columns"):
+        return [str(c) for c in list(X.columns)[:n_cols]]
+    return [f"f{i}" for i in range(n_cols)]
+
+
+def median_impute_fit(X: np.ndarray) -> np.ndarray:
+    """Compute per-column medians on training X (NaN-safe).
+
+    Inputs: training feature matrix (n, p), may contain NaNs.
+    Outputs: shape (p,) medians; 0.0 where a column is entirely missing.
+    Time allowed to know: training X only.
+    """
+    medians = np.nanmedian(X, axis=0)
+    medians = np.asarray(medians, dtype=np.float64)
+    medians[~np.isfinite(medians)] = 0.0
+    return medians
+
+
+def median_impute_apply(X: np.ndarray, medians: np.ndarray) -> np.ndarray:
+    """Replace NaNs / non-finite values with training column medians.
+
+    Inputs: feature matrix; medians from median_impute_fit.
+    Outputs: copy of X with finite floats only.
+    Time allowed to know: medians estimated on the fit window only.
+    """
+    out = np.array(X, dtype=np.float64, copy=True)
+    if out.shape[1] != medians.shape[0]:
+        raise ValueError(f"feature width {out.shape[1]} != median width {medians.shape[0]}")
+    for j in range(out.shape[1]):
+        mask = ~np.isfinite(out[:, j])
+        if mask.any():
+            out[mask, j] = medians[j]
+    return out
+
+
+def align_xy(X: Any, y: Any) -> tuple[np.ndarray, np.ndarray]:
+    """Coerce and length-check X and y for supervised candidates.
+
+    Inputs: feature matrix X; target vector y.
+    Outputs: (X_2d, y_1d) with matching row counts.
+    Time allowed to know: rows passed into fit/predict only.
+    """
+    X_arr = require_feature_matrix(X)
+    y_arr = to_1d_float(y, name="y")
+    if X_arr.shape[0] != y_arr.shape[0]:
+        raise ValueError(
+            f"X and y length mismatch: X has {X_arr.shape[0]} rows, y has {y_arr.shape[0]}"
+        )
+    return X_arr, y_arr
