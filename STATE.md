@@ -34,25 +34,20 @@ tasks:
     pr: https://github.com/Yuvraj2006py/ca-nowcaster/pull/18
   - id: CN-15
     role: Modeling
-    status: doing
+    status: done
     pr: https://github.com/Yuvraj2006py/ca-nowcaster/pull/21
-    note: "Phase 3 candidates registered at v0.1.0; ready for Skeptic holdout after merge"
+    note: "Phase 3 candidates (bridge, DFM, GBM, direction) merged to main"
   - id: CN-16
     role: Evaluation
     status: doing
     pr: https://github.com/Yuvraj2006py/ca-nowcaster/pull/20
-    note: "Skeptic report open; waiting on Modeling candidates then holdout burn"
-next_action: Merge Modeling Phase 3 candidates PR when CI green; Evaluation rebases #20, refreshes report, burns holdout once per (name, version=0.1.0).
-last_updated: 2026-10-29T15:05:00Z
+    note: "DIRTY after #21 — rebase onto main required before merge; holdout not burned"
+next_action: Evaluation rebases and greens #20, then opens follow-up holdout/verdicts PR (once per final model version); do not start Phase 4 until Skeptic holdout/verdicts land.
+last_updated: 2026-10-29T15:12:00Z
 
 ## Status note
 
-Phase 3 in progress. Modeling ships candidate registry (`list_candidates` /
-`create_candidate` / `iter_candidates`) with final versions **`0.1.0`**:
-`bridge`, `dynamic_factor`, `gradient_boosting`, `direction_classifier`
-(+ comparison `direction_boosting`). Baselines untouched. Evaluation #20 has
-metrics/audits but no candidates yet — ready to discover after this Modeling PR
-lands. Holdout stays locked until Skeptic burns once per final version.
+Phase 3 **in progress** (not complete). Modeling candidates [#21](https://github.com/Yuvraj2006py/ca-nowcaster/pull/21) are on `main` (main `ci` green). Evaluation [#20](https://github.com/Yuvraj2006py/ca-nowcaster/pull/20) conflicts with main after #21 — DevOps asked Skeptic to rebase; will squash-merge only when CLEAN + all checks green. Holdout stays locked until a Skeptic follow-up burns it once per final `(name, version)`. **Do not start Phase 4.**
 
 ### PRs
 
@@ -68,7 +63,8 @@ lands. Holdout stays locked until Skeptic burns once per final version.
 | [#17](https://github.com/Yuvraj2006py/ca-nowcaster/pull/17) | Merged — Feature leakage-safe monthly frame |
 | [#18](https://github.com/Yuvraj2006py/ca-nowcaster/pull/18) | Merged green — Evaluation harness + joint Phase 2 gate |
 | [#19](https://github.com/Yuvraj2006py/ca-nowcaster/pull/19) | Merged — Phase 2 complete / Phase 3 next_action |
-| [#20](https://github.com/Yuvraj2006py/ca-nowcaster/pull/20) | Open — Evaluation Skeptic Phase 3 (awaiting candidates) |
+| [#20](https://github.com/Yuvraj2006py/ca-nowcaster/pull/20) | Open DIRTY — Evaluation infra; rebase after #21 |
+| [#21](https://github.com/Yuvraj2006py/ca-nowcaster/pull/21) | Merged green — Phase 3 Modeling candidates |
 
 ### Auto-merge / human taps (still recommended)
 
