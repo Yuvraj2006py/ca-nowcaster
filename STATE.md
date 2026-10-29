@@ -46,7 +46,7 @@ tasks:
     role: Security
     status: doing
     pr: https://github.com/Yuvraj2006py/ca-nowcaster/pull/24
-    note: "Phase 4 security review + CI/config harden; docs/security_review.md; rebased onto main post-#23"
+    note: "Phase 4 security review + CI/config harden; rebased post-#23; ci green; DevOps pinged"
   - id: CN-17
     role: Live Pipeline
     status: doing
@@ -56,7 +56,7 @@ tasks:
     status: doing
     pr: null
 next_action: Merge Security/Live/Dashboard Phase 4 PRs when CI green; Security re-checks live workflow + dashboard after those land.
-last_updated: 2026-10-29T15:45:00Z
+last_updated: 2026-10-29T15:50:00Z
 
 ## Status note
 
@@ -80,7 +80,7 @@ Phase 3 is **complete** on `main` (#21 + #20; post-merge `ci` green). Phase 4 **
 | [#22](https://github.com/Yuvraj2006py/ca-nowcaster/pull/22) | Merged — STATE wait for #20 |
 | [#20](https://github.com/Yuvraj2006py/ca-nowcaster/pull/20) | Merged green — Skeptic verdicts + holdout burns |
 | [#23](https://github.com/Yuvraj2006py/ca-nowcaster/pull/23) | Merged — Phase 3 complete; next_action Phase 4 |
-| [#24](https://github.com/Yuvraj2006py/ca-nowcaster/pull/24) | Open — Security Phase 4 review + CI harden (rebased) |
+| [#24](https://github.com/Yuvraj2006py/ca-nowcaster/pull/24) | Open CLEAN — Security Phase 4; `ci` green; DevOps pinged |
 
 ### Auto-merge / human taps (still recommended)
 
