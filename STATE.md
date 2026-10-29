@@ -1,12 +1,14 @@
-# Final summary (Phase 5)
+# Final summary (v1 ship)
 
-**v1 ship complete in-repo.** Documentation Coach delivered README, model card,
-interview notes, and resume bullets grounded only in `docs/evaluation_report.md`.
-Honest result stands: **no regression candidate beat AR(1)** on headline RMSE with
-Diebold-Mariano + bootstrap CI — production remains **`ar1` @ `0.1.0`**.
+**v1 ship complete in-repo.** Phases 0–5 are on `main` with green CI after Documentation [#29](https://github.com/Yuvraj2006py/ca-nowcaster/pull/29). README, model card, interview notes, and resume bullets are grounded only in `docs/evaluation_report.md`.
 
-**Still human:** Streamlit Community Cloud deploy (`docs/streamlit_deploy.md`) and
-optional GitHub auto-merge / branch-protection taps. Do not block ship on the Cloud URL.
+Honest result: **no regression candidate beat AR(1)** on headline RMSE (Diebold-Mariano + bootstrap CI). Production model remains **`ar1` @ `0.1.0`** (Live Pipeline #26).
+
+**Remaining human only:**
+1. Streamlit Community Cloud deploy — `docs/streamlit_deploy.md` (paste URL into `dashboard_public_url` / README)
+2. Optional: Allow auto-merge + require status check **`ci`** on `main` (repo Settings)
+
+Do not block ship on the Cloud URL. DevOps will not loosen CI checks.
 
 ---
 
@@ -48,12 +50,10 @@ tasks:
     role: Modeling
     status: done
     pr: https://github.com/Yuvraj2006py/ca-nowcaster/pull/21
-    note: "Phase 3 candidates (bridge, DFM, GBM, direction) merged to main"
   - id: CN-16
     role: Evaluation
     status: done
     pr: https://github.com/Yuvraj2006py/ca-nowcaster/pull/20
-    note: "Candidate verdicts + holdout burns @ 0.1.0; production_model ar1"
   - id: CN-19
     role: Security
     status: done
@@ -62,37 +62,31 @@ tasks:
     role: Dashboard
     status: done
     pr: https://github.com/Yuvraj2006py/ca-nowcaster/pull/25
-    note: "Streamlit dashboard on main; Cloud URL needs human"
   - id: CN-17
     role: Live Pipeline
     status: done
     pr: https://github.com/Yuvraj2006py/ca-nowcaster/pull/26
-    note: "AR(1) production; scheduled predict/score"
   - id: CN-8
     role: Documentation
     status: done
     pr: https://github.com/Yuvraj2006py/ca-nowcaster/pull/29
-    note: "README, model card, interview notes, resume bullets, Phase 5 gate"
   - id: CN-11
     role: human
     status: todo
-    note: "GitHub auto-merge + require ci on main"
+    note: "Optional: GitHub Allow auto-merge + require ci on main"
   - id: CN-20
     role: human
     status: todo
     note: "Streamlit Community Cloud deploy — docs/streamlit_deploy.md"
-next_action: Human deploys Streamlit Community Cloud per docs/streamlit_deploy.md and pastes public URL here; optional branch-protection / auto-merge taps.
-last_updated: 2026-10-29T15:56:00Z
+next_action: Human deploys Streamlit Community Cloud per docs/streamlit_deploy.md and pastes public URL into dashboard_public_url; optional auto-merge / branch-protection taps.
+last_updated: 2026-10-29T16:02:00Z
 production_model: ar1
 production_version: "0.1.0"
 dashboard_public_url: null
 
 ## Status note
 
-Phase 4 completed on `main` via #24/#25/#26 (Orchestrator #28). Phase 5 Documentation
-(#29) rebased after #28 — README / model card / interview notes / resume bullets.
-Evaluation loud verdict unchanged: no candidate cleared DM + bootstrap vs AR(1).
-Public Streamlit Cloud URL remains the human step (`docs/streamlit_deploy.md`).
+DevOps confirmed [#29](https://github.com/Yuvraj2006py/ca-nowcaster/pull/29) squash-merged (CLEAN + all checks green) and post-merge `ci` on `main` **green**. [#27](https://github.com/Yuvraj2006py/ca-nowcaster/pull/27) was already merged. In-repo agent work for v1 is complete.
 
 ### PRs
 
@@ -117,9 +111,9 @@ Public Streamlit Cloud URL remains the human step (`docs/streamlit_deploy.md`).
 | [#26](https://github.com/Yuvraj2006py/ca-nowcaster/pull/26) | Merged green — Live Pipeline Phase 4 (AR(1)) |
 | [#27](https://github.com/Yuvraj2006py/ca-nowcaster/pull/27) | Merged — DevOps ack Security #24 |
 | [#28](https://github.com/Yuvraj2006py/ca-nowcaster/pull/28) | Merged — Phase 4 complete; next_action Phase 5 |
-| [#29](https://github.com/Yuvraj2006py/ca-nowcaster/pull/29) | Open — Phase 5 Documentation ship (rebased post-#28) |
+| [#29](https://github.com/Yuvraj2006py/ca-nowcaster/pull/29) | Merged green — Phase 5 Documentation ship |
 
-### Human taps — Streamlit Community Cloud (Dashboard)
+### Human taps — Streamlit Community Cloud
 
 Exact steps: **`docs/streamlit_deploy.md`**. Short version:
 
@@ -129,10 +123,8 @@ Exact steps: **`docs/streamlit_deploy.md`**. Short version:
 4. Python **3.11** · no secrets for v1 → **Deploy**
 5. Paste public URL into `dashboard_public_url` above / README when live
 
-### Auto-merge / branch protection (still recommended)
+### Optional — auto-merge / branch protection
 
 1. https://github.com/Yuvraj2006py/ca-nowcaster/settings → **Allow auto-merge**
 2. Branch ruleset on `main`: require PR + require status check **`ci`** + block force pushes
 3. Actions: allow GitHub Actions to create/approve PRs (Dependabot)
-4. Live pipeline workflows need `contents: write` + `issues: write` on schedule
-   (see `docs/requests/devops-live-pipeline-workflows.md`)
