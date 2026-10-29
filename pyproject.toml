@@ -38,6 +38,9 @@ nowcaster-ingest-refresh = "nowcaster.ingest.cli:main"
 [tool.setuptools.packages.find]
 where = ["src"]
 
+[tool.setuptools.package-data]
+nowcaster = ["app/fixtures/*"]
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["src"]
