@@ -23,10 +23,10 @@ tasks:
   - id: CN-13
     role: Modeling
     status: doing
-    pr: null
+    pr: https://github.com/Yuvraj2006py/ca-nowcaster/pull/16
     note: "Phase 2 baselines (last_value, ar1, rolling_mean) + registry + docs; no Phase 3 models"
-next_action: Merge Modeling baselines PR when CI green; Evaluation wires harness to nowcaster.models.create_baseline / iter_baselines; Feature continues leakage-safe frame.
-last_updated: 2026-10-29T14:22:00Z
+next_action: Merge Modeling baselines PR #16 when CI green; Evaluation wires harness to nowcaster.models.create_baseline / iter_baselines; Feature continues leakage-safe frame.
+last_updated: 2026-10-29T14:25:00Z
 
 ## Status note
 
@@ -42,6 +42,7 @@ Phase 2 in progress. Modeling implements Phase 2 **baselines only** under `src/n
 | [#13](https://github.com/Yuvraj2006py/ca-nowcaster/pull/13) | Merged — Data Quality as_of gate + quality report |
 | [#14](https://github.com/Yuvraj2006py/ca-nowcaster/pull/14) | Merged green — Ingestion clients + registry + refresh CLI |
 | [#15](https://github.com/Yuvraj2006py/ca-nowcaster/pull/15) | Merged — Phase 1 complete / Phase 2 next_action |
+| [#16](https://github.com/Yuvraj2006py/ca-nowcaster/pull/16) | Open — Phase 2 Modeling baselines + harness registry |
 
 ### Auto-merge / human taps (still recommended)
 
