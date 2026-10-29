@@ -11,45 +11,41 @@ tasks:
   - id: CN-3
     role: DevOps
     status: doing
-    pr: https://github.com/Yuvraj2006py/ca-nowcaster/pull/2
-next_action: After CI PR merges to main (human merge if needed), start Phase 1 — Ingestion + Data Quality (Roles 1–2); do not start features or models.
-last_updated: 2026-10-29T13:25:00Z
+    pr: https://github.com/Yuvraj2006py/ca-nowcaster/pull/3
+next_action: After pip-audit fix PR merges and `ci` is green on main, start Phase 1 — Ingestion + Data Quality (Roles 1–2); do not start features or models.
+last_updated: 2026-10-29T13:15:00Z
 
 ## Status note
 
-PR #1 (Phase 0 skeleton) is **merged** to `main`. CI did not land in that merge (CI commit arrived on the branch after merge). DevOps follow-up is PR #2 on `cursor/devops-ci-9deb`.
+- PR #1 Phase 0 skeleton: **merged**
+- PR #2 CI workflow: **merged** while `lint-test-security` was still running; `pip-audit` then failed on main (`--strict --skip-editable` treats the editable local dist as a collection failure). Checks were **not** loosened.
+- PR #3: fix-forward for pip-audit (freeze `--exclude-editable` + audit with `--strict --no-deps`). This is CI fix attempt **1** for that root cause.
 
-Phase remains **0** until `main` has Phase 0 **and** CI.
+Phase remains **0** until `main` has Phase 0 + **green** CI.
 
 ## Human taps required
 
-Repo `allow_auto_merge` is **false**. Cursor integration cannot enable auto-merge. Actions showed **zero** workflow runs before CI existed on a PR — confirm Actions are enabled.
+Repo `allow_auto_merge` is **false**. Do not merge red PRs.
 
-### A. Enable GitHub Actions (if workflows do not appear on PR #2)
+### A. Enable auto-merge (one-time)
 
-1. Open https://github.com/Yuvraj2006py/ca-nowcaster/settings/actions
-2. Under **Actions permissions**, choose **Allow all actions and reusable workflows** (or allow necessary actions)
-3. Save
+1. https://github.com/Yuvraj2006py/ca-nowcaster/settings
+2. **General** → **Pull Requests** → **Allow auto-merge**
+3. Keep squash merging enabled
+4. **Actions** → **General** → allow GitHub Actions to create and approve PRs
 
-### B. Enable auto-merge on the repo (one-time)
-
-1. Open https://github.com/Yuvraj2006py/ca-nowcaster/settings
-2. **General** → **Pull Requests** → check **Allow auto-merge**
-3. Prefer squash merging enabled
-4. **Settings** → **Actions** → **General** → allow GitHub Actions to create and approve pull requests (Dependabot / bot PRs)
-
-### C. Branch protection / ruleset on `main` (one-time)
+### B. Branch protection on `main` (one-time — prevents merging before green)
 
 1. **Settings** → **Rules** → **Rulesets** (or **Branches**)
 2. Require a pull request before merging
-3. Require status checks; add check name **`ci`** after it has run once on PR #2
+3. Require status checks to pass; require check name **`ci`**
 4. Block force pushes and deletions
 
-### D. Merge PR #2 (CI) when green
+### C. Merge PR #3 when green
 
-1. Open https://github.com/Yuvraj2006py/ca-nowcaster/pull/2
-2. Wait for green: **`ci`**, **`lint-test-security`**, **`holdout-guard`** (and GitGuardian if present)
-3. **Enable auto-merge** (squash) if step B is done; otherwise **Squash and merge**
-4. Confirm merge to `main`
+1. Open https://github.com/Yuvraj2006py/ca-nowcaster/pull/3
+2. Wait for green **`ci`** / **`lint-test-security`** / **`holdout-guard`**
+3. Squash-merge (or enable auto-merge if A is done)
+4. Confirm a subsequent push/`ci` run on `main` is green
 
-DevOps stops after CI is green if merge permission is denied. Do not start ingestion until `main` has CI.
+If PR #3 CI fails again for the same pip-audit cause after this fix, open a GitHub issue `BLOCKED: CI pip-audit` and set CN-3 to BLOCKED (see `docs/ci-failure-handling.md`).

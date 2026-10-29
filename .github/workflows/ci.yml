@@ -45,8 +45,11 @@ jobs:
         run: pytest -q tests/
 
       - name: pip-audit
-        # Skip the local editable install (not on PyPI); audit resolved third-party deps only.
-        run: pip-audit --strict --skip-editable
+        # Freeze excludes the local editable install; --no-deps audits the exact resolved set.
+        # (pip-audit --strict --skip-editable fails collection on the editable dist itself.)
+        run: |
+          pip freeze --exclude-editable > "${RUNNER_TEMP}/audit-reqs.txt"
+          pip-audit --strict --no-deps -r "${RUNNER_TEMP}/audit-reqs.txt"
 
       - name: Bandit
         run: bandit -r src -ll -q
