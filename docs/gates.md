@@ -39,4 +39,7 @@ Honest-result rule: if no model beats the baseline, v1 still ships.
 - [x] Baselines only: `last_value`, `ar1`, `rolling_mean` implementing `NowcastModel` (Modeling)
 - [x] Registry (`create_baseline` / `iter_baselines`) so Evaluation runs baselines without editing model bodies (Modeling)
 - [x] One-page plain-language docs per baseline under `docs/models/` (Modeling)
-- [ ] Walk-forward harness runs baselines end-to-end (Evaluation; Phase 2 gate)
+- [x] Expanding-window walk-forward harness + metrics scaffolding (Evaluation)
+- [x] COVID headline/full metric variants; leakage audit hooks; holdout lock docs
+- [x] Joint gate: Feature leakage tests + `build_features` → baselines → walk-forward
+  (`tests/gates/test_phase_2.py`)

@@ -2,10 +2,20 @@
 
 This file is owned by the **Evaluation Skeptic**. Do not edit it from other roles.
 
-Locked holdout (v1 target): final 24 months of evaluation data. Touch once per final model set; record each access here.
+## Lock policy (v1)
+
+- **Window:** final **24** calendar months of available target reference months
+  (`nowcaster.evaluation.holdout_lock.HOLDOUT_MONTHS`).
+- **Phase 2:** harness scaffolding only. Walk-forward **excludes** holdout
+  months by default and raises if asked to score them without unlock.
+- **Do not burn** the holdout on unfinished models, partial feature sets, or
+  exploratory tuning.
+- **Phase 3 / final:** touch once per final model set; record the access below
+  before any unlock (`WalkForwardConfig.holdout_unlocked=True`).
 
 | Date (UTC) | Actor / branch | Model set | Notes |
 |------------|----------------|-----------|-------|
-| — | — | — | Stub created by DevOps; no holdout evaluation run yet. |
+| 2026-10-29 | Evaluation Skeptic / `cursor/evaluation-harness-c310` | — | Phase 2 lock documented; no holdout evaluation run. |
 
-CI enforces this lock via the `holdout-guard` job (see `.github/workflows/ci.yml` and `scripts/ci/holdout_guard.sh`).
+CI enforces path edits via the `holdout-guard` job (see `.github/workflows/ci.yml`
+and `scripts/ci/holdout_guard.sh`).
