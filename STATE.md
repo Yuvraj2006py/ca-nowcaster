@@ -56,8 +56,8 @@ tasks:
     role: Live Pipeline
     status: doing
     pr: null
-next_action: DevOps squash-merge Dashboard #25 when CI green; Live Pipeline write prediction/score logs; human Streamlit Cloud deploy per docs/streamlit_deploy.md; Security re-check dashboard after merge.
-last_updated: 2026-10-29T15:42:00Z
+next_action: DevOps squash-merge Dashboard #25 (CLEAN + CI green); Live Pipeline write prediction/score logs; human Streamlit Cloud deploy per docs/streamlit_deploy.md; Security re-check dashboard after merge.
+last_updated: 2026-10-29T15:43:00Z
 
 ## Status note
 
@@ -86,7 +86,7 @@ Public Streamlit URL is a **human** step — do not block the Dashboard PR on de
 | [#20](https://github.com/Yuvraj2006py/ca-nowcaster/pull/20) | Merged green — Skeptic verdicts + holdout burns |
 | [#23](https://github.com/Yuvraj2006py/ca-nowcaster/pull/23) | Merged — Phase 3 complete; next_action Phase 4 |
 | [#24](https://github.com/Yuvraj2006py/ca-nowcaster/pull/24) | Merged — Security Phase 4 review + CI harden |
-| [#25](https://github.com/Yuvraj2006py/ca-nowcaster/pull/25) | Open — Dashboard Streamlit (rebased onto main+#24) |
+| [#25](https://github.com/Yuvraj2006py/ca-nowcaster/pull/25) | Open, CLEAN + CI green — Dashboard Streamlit |
 
 ### Human taps — Streamlit Community Cloud (Dashboard)
 
