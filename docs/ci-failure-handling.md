@@ -6,7 +6,7 @@ Do not loosen checks. Do not merge red PRs. Do not edit feature or model code fr
 
 | Check | Purpose |
 |-------|---------|
-| `lint-test-security` | ruff, pytest (incl. `tests/gates/`), pip-audit, bandit, TruffleHog secret scan |
+| `lint-test-security` | ruff, pytest (incl. `tests/gates/` + `tests/security/`), pip-audit, bandit, secret-path hygiene, TruffleHog secret scan |
 | `holdout-guard` | Non–Evaluation-Skeptic branches may not touch holdout paths |
 | `ci` | Aggregate gate for branch protection |
 
