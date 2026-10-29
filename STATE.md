@@ -29,14 +29,14 @@ tasks:
     role: Feature
     status: doing
     pr: https://github.com/Yuvraj2006py/ca-nowcaster/pull/17
-    note: "Rebased onto main post-#16; leakage-safe build_features + summary + Feature-half gate"
+    note: "CI green on 9b4bdd1 after rebase onto main post-#16; DevOps pinged to merge"
   - id: CN-5c
     role: Evaluation
     status: todo
     pr: null
     note: "Walk-forward harness on baselines + features still needed for Phase 2 gate"
-next_action: Merge Feature PR #17 when CI green; Evaluation wires harness to complete Phase 2 gate.
-last_updated: 2026-10-29T14:40:00Z
+next_action: DevOps merge Feature PR #17 (CI green); Evaluation wires harness to complete Phase 2 gate.
+last_updated: 2026-10-29T14:35:00Z
 
 ## Status note
 
