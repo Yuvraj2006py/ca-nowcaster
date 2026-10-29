@@ -19,9 +19,9 @@ tasks:
   - id: CN-10
     role: Data Quality
     status: doing
-    pr: pending
-next_action: Merge Data Quality PR when CI green; wait for Ingestion refresh command + Phase 1 gate complete before Phase 2.
-last_updated: 2026-10-29T13:55:00Z
+    pr: https://github.com/Yuvraj2006py/ca-nowcaster/pull/13
+next_action: Merge Data Quality PR #13 when CI green; wait for Ingestion refresh command + Phase 1 gate complete before Phase 2.
+last_updated: 2026-10-29T14:00:00Z
 
 ## Status note
 
@@ -34,4 +34,4 @@ Phase 1 in progress. Data Quality delivers `src/nowcaster/quality/` (validation,
 | [#1](https://github.com/Yuvraj2006py/ca-nowcaster/pull/1) | Merged — Phase 0 skeleton |
 | [#2](https://github.com/Yuvraj2006py/ca-nowcaster/pull/2) | Merged — CI workflow + holdout guard |
 | [#11](https://github.com/Yuvraj2006py/ca-nowcaster/pull/11) | Merged green — pip-audit freeze |
-| Data Quality (this branch) | Open — as_of leakage gate + quality report |
+| [#13](https://github.com/Yuvraj2006py/ca-nowcaster/pull/13) | Open — Data Quality as_of gate + quality report |
