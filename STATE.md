@@ -14,19 +14,18 @@ tasks:
     pr: https://github.com/Yuvraj2006py/ca-nowcaster/pull/11
   - id: CN-9
     role: Ingestion
-    status: doing
+    status: done
     pr: https://github.com/Yuvraj2006py/ca-nowcaster/pull/14
-    note: "Rebased onto main (post #13); CI green — ready to merge"
   - id: CN-10
     role: Data Quality
     status: done
     pr: https://github.com/Yuvraj2006py/ca-nowcaster/pull/13
-next_action: DevOps/Orchestrator merge Ingestion PR #14 (CI green, mergeable); then Phase 1 gate / Phase 2.
-last_updated: 2026-10-29T14:06:00Z
+next_action: Start Phase 2 — Feature Engineer + Modeling baselines + Evaluation harness; do not start live pipeline or dashboard until Phase 2 gate passes.
+last_updated: 2026-10-29T14:12:00Z
 
 ## Status note
 
-Phase 1 in progress. Data Quality (#13) is on `main`. Ingestion implements StatCan WDS + BoC Valet clients, verified `series_registry.yaml` (10 series), DuckDB raw store with vintage dedupe, and `nowcaster-ingest-refresh` CLI. Live `--twice` refresh: first inserted 5240 rows, second inserted 0. Coordinates with Quality via raw-store contract / Valet release-timestamp request docs.
+Phase 1 is **complete** on `main`: Data Quality (#13) and Ingestion (#14) merged with green PR checks; post-merge `ci` on `main` after #14 is **green**. Phase field stays `1` until Orchestrator formally opens Phase 2; prerequisite for Phase 2 is met.
 
 ### Refresh command
 
@@ -44,7 +43,7 @@ nowcaster-ingest-refresh --twice
 | [#2](https://github.com/Yuvraj2006py/ca-nowcaster/pull/2) | Merged — CI workflow + holdout guard |
 | [#11](https://github.com/Yuvraj2006py/ca-nowcaster/pull/11) | Merged green — pip-audit freeze |
 | [#13](https://github.com/Yuvraj2006py/ca-nowcaster/pull/13) | Merged — Data Quality as_of gate + quality report |
-| [#14](https://github.com/Yuvraj2006py/ca-nowcaster/pull/14) | Open — Ingestion clients + registry + refresh CLI |
+| [#14](https://github.com/Yuvraj2006py/ca-nowcaster/pull/14) | Merged green — Ingestion clients + registry + refresh CLI |
 
 ### Auto-merge / human taps (still recommended)
 
