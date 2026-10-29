@@ -17,10 +17,10 @@ dependencies = [
   "statsmodels==0.14.4",
   "duckdb==1.1.3",
   "pyyaml==6.0.2",
-  "streamlit==1.54.0",
+  # 1.66.1+ allows pillow 13 (needed for pip-audit); older streamlit caps pillow<13.
+  "streamlit==1.66.1",
   "requests==2.34.2",
   "python-dotenv==1.2.4",
-  # Transitive via streamlit; pin so pip-audit stays green.
   "pillow==13.0.0",
 ]
 
