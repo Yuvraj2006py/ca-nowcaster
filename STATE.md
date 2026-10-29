@@ -24,27 +24,20 @@ tasks:
     role: Modeling
     status: done
     pr: https://github.com/Yuvraj2006py/ca-nowcaster/pull/16
-    note: "Phase 2 baselines merged to main (#16)"
   - id: CN-12
     role: Feature
     status: done
     pr: https://github.com/Yuvraj2006py/ca-nowcaster/pull/17
-    note: "Leakage-safe build_features merged to main (#17)"
   - id: CN-14
     role: Evaluation
-    status: doing
+    status: done
     pr: https://github.com/Yuvraj2006py/ca-nowcaster/pull/18
-    note: "Harness + joint Phase 2 gate rebased onto main after #17; awaiting CI green / DevOps merge"
-next_action: DevOps merge Evaluation PR #18 when CI green (Phase 2 gate complete on branch).
-last_updated: 2026-10-29T14:40:00Z
+next_action: Start Phase 3 — Modeling candidates + Evaluation Skeptic verdicts; do not start live pipeline or dashboard until Phase 3 gate passes.
+last_updated: 2026-10-29T14:43:00Z
 
 ## Status note
 
-Phase 2 nearly complete on `main`: Modeling (#16) and Feature (#17) merged.
-Evaluation [#18](https://github.com/Yuvraj2006py/ca-nowcaster/pull/18) rebased onto
-main with walk-forward harness and joint gate (Feature leakage tests +
-`build_features` → baselines → walk-forward). No edits under `features/` or
-`models/`. Holdout not burned.
+Phase 2 is **complete** on `main`: Modeling baselines (#16), Feature leakage-safe frame (#17), and Evaluation harness + joint gate (#18) are merged. Post-merge `ci` on `main` after #18 is **green**. Phase field stays `2` until Orchestrator formally opens Phase 3; prerequisite for Phase 3 is met.
 
 ### PRs
 
@@ -56,9 +49,9 @@ main with walk-forward harness and joint gate (Feature leakage tests +
 | [#13](https://github.com/Yuvraj2006py/ca-nowcaster/pull/13) | Merged — Data Quality as_of gate + quality report |
 | [#14](https://github.com/Yuvraj2006py/ca-nowcaster/pull/14) | Merged green — Ingestion clients + registry + refresh CLI |
 | [#15](https://github.com/Yuvraj2006py/ca-nowcaster/pull/15) | Merged — Phase 1 complete / Phase 2 next_action |
-| [#16](https://github.com/Yuvraj2006py/ca-nowcaster/pull/16) | Merged — Phase 2 Modeling baselines + harness registry |
-| [#17](https://github.com/Yuvraj2006py/ca-nowcaster/pull/17) | Merged — Feature leakage-safe monthly frame + summary |
-| [#18](https://github.com/Yuvraj2006py/ca-nowcaster/pull/18) | Open — Evaluation harness + joint Phase 2 gate (rebased) |
+| [#16](https://github.com/Yuvraj2006py/ca-nowcaster/pull/16) | Merged — Phase 2 Modeling baselines |
+| [#17](https://github.com/Yuvraj2006py/ca-nowcaster/pull/17) | Merged — Feature leakage-safe monthly frame |
+| [#18](https://github.com/Yuvraj2006py/ca-nowcaster/pull/18) | Merged green — Evaluation harness + joint Phase 2 gate |
 
 ### Auto-merge / human taps (still recommended)
 
