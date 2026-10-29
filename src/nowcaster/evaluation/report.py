@@ -311,13 +311,9 @@ def run_phase3_evaluation(
 
     results: dict[str, WalkForwardResult] = {}
     for name, factory in baseline_factories.items():
-        results[name] = run_walk_forward(
-            factory, X, y, as_of_by_month=as_of_by_month, config=cfg
-        )
+        results[name] = run_walk_forward(factory, X, y, as_of_by_month=as_of_by_month, config=cfg)
     for name, factory in candidate_factories.items():
-        results[name] = run_walk_forward(
-            factory, X, y, as_of_by_month=as_of_by_month, config=cfg
-        )
+        results[name] = run_walk_forward(factory, X, y, as_of_by_month=as_of_by_month, config=cfg)
 
     if reference_baseline not in results:
         raise KeyError(f"reference baseline {reference_baseline!r} missing from results")
@@ -362,9 +358,7 @@ def run_phase3_evaluation(
             uses_features=False,
         ).items()
     }
-    regression_factories = {
-        n: f for n, f in candidate_factories.items() if n in regression_names
-    }
+    regression_factories = {n: f for n, f in candidate_factories.items() if n in regression_names}
     if regression_factories:
         first_name = next(iter(regression_factories))
         leakage["first_candidate"] = {
@@ -414,8 +408,7 @@ def run_phase3_evaluation(
     else:
         names = ", ".join(v.model_name for v in beaters)
         honest = (
-            f"Regression candidates that beat {reference_baseline} "
-            f"(headline, with stats): {names}."
+            f"Regression candidates that beat {reference_baseline} (headline, with stats): {names}."
         )
         holdout = (
             "Holdout status set by caller; walk-forward table excludes the final "

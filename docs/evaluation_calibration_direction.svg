@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="420" height="320" viewBox="0 0 420 320">
+<rect width="100%" height="100%" fill="#fafafa"/>
+<line x1="48" y1="20" x2="48" y2="272" stroke="#333" stroke-width="1"/>
+<line x1="48" y1="272" x2="400" y2="272" stroke="#333" stroke-width="1"/>
+<line x1="48.0" y1="272.0" x2="400.0" y2="20.0" stroke="#999" stroke-dasharray="4 3" stroke-width="1"/>
+<circle cx="54.25234696804784" cy="272.0" r="3.6" fill="#1f4e79" fill-opacity="0.85"/>
+<circle cx="114.14989658247868" cy="272.0" r="3.6" fill="#1f4e79" fill-opacity="0.85"/>
+<circle cx="141.1873613671075" cy="272.0" r="3.45" fill="#1f4e79" fill-opacity="0.85"/>
+<circle cx="165.37117863558348" cy="272.0" r="3.45" fill="#1f4e79" fill-opacity="0.85"/>
+<circle cx="210.70771465997848" cy="20.0" r="3.6" fill="#1f4e79" fill-opacity="0.85"/>
+<circle cx="238.88373647861454" cy="132.0" r="4.35" fill="#1f4e79" fill-opacity="0.85"/>
+<circle cx="283.8443912066755" cy="20.0" r="3.45" fill="#1f4e79" fill-opacity="0.85"/>
+<circle cx="319.16370411183203" cy="20.0" r="3.3" fill="#1f4e79" fill-opacity="0.85"/>
+<circle cx="353.8056058491334" cy="20.0" r="3.45" fill="#1f4e79" fill-opacity="0.85"/>
+<circle cx="385.12450292461773" cy="61.99999999999999" r="3.9" fill="#1f4e79" fill-opacity="0.85"/>
+<polyline points="54.25234696804784,272.0 114.14989658247868,272.0 141.1873613671075,272.0 165.37117863558348,272.0 210.70771465997848,20.0 238.88373647861454,132.0 283.8443912066755,20.0 319.16370411183203,20.0 353.8056058491334,20.0 385.12450292461773,61.99999999999999" fill="none" stroke="#1f4e79" stroke-width="1.5"/>
+<text x="224.0" y="308" text-anchor="middle" font-size="12" fill="#333">Mean predicted probability</text>
+<text x="14" y="146.0" text-anchor="middle" font-size="12" fill="#333" transform="rotate(-90 14 146.0)">Fraction positive</text>
+</svg>
