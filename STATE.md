@@ -16,13 +16,13 @@ tasks:
     role: Ingestion
     status: doing
     pr: https://github.com/Yuvraj2006py/ca-nowcaster/pull/14
-    note: "PR open, CI green — ready to merge when Orchestrator/DevOps approve"
+    note: "Rebased onto main (post #13); CI green — ready to merge"
   - id: CN-10
     role: Data Quality
     status: done
     pr: https://github.com/Yuvraj2006py/ca-nowcaster/pull/13
-next_action: Merge Ingestion PR when CI green; then Phase 1 gate / Phase 2.
-last_updated: 2026-10-29T14:05:00Z
+next_action: DevOps/Orchestrator merge Ingestion PR #14 (CI green, mergeable); then Phase 1 gate / Phase 2.
+last_updated: 2026-10-29T14:06:00Z
 
 ## Status note
 
