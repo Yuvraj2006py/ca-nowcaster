@@ -25,7 +25,15 @@ Honest-result rule: if no model beats the baseline, v1 still ships.
 
 ## Phase 1 checklist
 
-- [ ] One command refreshes all registry series into the raw store (Ingestion)
+- [x] One command refreshes all registry series into the raw store (Ingestion)
 - [x] `as_of(date)` never returns a value with release date after date (Data Quality; `tests/gates/test_phase_1.py`)
 - [x] Validation checks + release calendar + pseudo-real-time lags (`src/nowcaster/quality/`)
 - [x] Series data-quality status report (`docs/quality_report.md`)
+
+## Phase 2 checklist
+
+- [ ] Leakage-safe `build_features(as_of_date)` + feature summary (Feature)
+- [x] Baselines only: `last_value`, `ar1`, `rolling_mean` implementing `NowcastModel` (Modeling)
+- [x] Registry (`create_baseline` / `iter_baselines`) so Evaluation runs baselines without editing model bodies (Modeling)
+- [x] One-page plain-language docs per baseline under `docs/models/` (Modeling)
+- [ ] Walk-forward harness runs baselines end-to-end (Evaluation; Phase 2 gate)

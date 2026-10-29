@@ -1,4 +1,4 @@
-phase: 1
+phase: 2
 tasks:
   - id: CN-1
     role: human
@@ -20,20 +20,17 @@ tasks:
     role: Data Quality
     status: done
     pr: https://github.com/Yuvraj2006py/ca-nowcaster/pull/13
-next_action: Start Phase 2 — Feature Engineer + Modeling baselines + Evaluation harness; do not start live pipeline or dashboard until Phase 2 gate passes.
-last_updated: 2026-10-29T14:12:00Z
+  - id: CN-13
+    role: Modeling
+    status: doing
+    pr: https://github.com/Yuvraj2006py/ca-nowcaster/pull/16
+    note: "Phase 2 baselines PR #16 CI green — ready to merge; Evaluation can import create_baseline/iter_baselines"
+next_action: Merge Modeling baselines PR #16 (CI green); Evaluation wires harness; Feature continues leakage-safe frame.
+last_updated: 2026-10-29T14:26:00Z
 
 ## Status note
 
-Phase 1 is **complete** on `main`: Data Quality (#13) and Ingestion (#14) merged with green PR checks; post-merge `ci` on `main` after #14 is **green**. Phase field stays `1` until Orchestrator formally opens Phase 2; prerequisite for Phase 2 is met.
-
-### Refresh command
-
-```bash
-pip install -e ".[dev]"
-nowcaster-ingest-refresh --twice
-# or: python -m nowcaster.ingest.cli --twice
-```
+Phase 2 in progress. Modeling implements Phase 2 **baselines only** under `src/nowcaster/models/`: `last_value`, `ar1`, `rolling_mean`, each with `fit` / `predict` → point + 80%/95% intervals, plus `create_baseline` / `iter_baselines` for the evaluation harness. Plain-language pages in `docs/models/`. Features API still incomplete — baselines use synthetic fixtures and `docs/requests/features-baseline-xy-contract.md`.
 
 ### PRs
 
@@ -44,6 +41,8 @@ nowcaster-ingest-refresh --twice
 | [#11](https://github.com/Yuvraj2006py/ca-nowcaster/pull/11) | Merged green — pip-audit freeze |
 | [#13](https://github.com/Yuvraj2006py/ca-nowcaster/pull/13) | Merged — Data Quality as_of gate + quality report |
 | [#14](https://github.com/Yuvraj2006py/ca-nowcaster/pull/14) | Merged green — Ingestion clients + registry + refresh CLI |
+| [#15](https://github.com/Yuvraj2006py/ca-nowcaster/pull/15) | Merged — Phase 1 complete / Phase 2 next_action |
+| [#16](https://github.com/Yuvraj2006py/ca-nowcaster/pull/16) | Open, CI green — Phase 2 Modeling baselines + harness registry |
 
 ### Auto-merge / human taps (still recommended)
 
