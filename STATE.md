@@ -15,8 +15,8 @@ tasks:
   - id: CN-9
     role: Ingestion
     status: doing
-    pr: null
-    note: "PR opening — StatCan+Valet clients, verified registry, refresh CLI"
+    pr: https://github.com/Yuvraj2006py/ca-nowcaster/pull/14
+    note: "PR open — StatCan+Valet clients, verified registry, refresh CLI; await CI"
   - id: CN-10
     role: Data Quality
     status: done
