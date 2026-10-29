@@ -1,0 +1,23 @@
+series:
+- series_id: ca_gdp_basic_prices
+  source: statcan
+  table_id: 36-10-0434-01
+  vector_id: '65201210'
+  valet_series: null
+  name: GDP test
+  frequency: monthly
+  unit: dollars
+  verified_at: '2026-10-29T13:50:00+00:00'
+  verification_notes: fixture
+  target_role: primary_target
+- series_id: boc_policy_rate
+  source: boc_valet
+  table_id: null
+  vector_id: null
+  valet_series: STATIC_ATABLE_V39079
+  name: policy rate test
+  frequency: monthly
+  unit: percent
+  verified_at: '2026-10-29T13:50:00+00:00'
+  verification_notes: fixture
+  target_role: indicator

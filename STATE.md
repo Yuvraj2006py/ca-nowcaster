@@ -15,17 +15,26 @@ tasks:
   - id: CN-9
     role: Ingestion
     status: doing
-    pr: null
+    pr: https://github.com/Yuvraj2006py/ca-nowcaster/pull/14
+    note: "Rebased onto main (post #13); CI green — ready to merge"
   - id: CN-10
     role: Data Quality
     status: done
     pr: https://github.com/Yuvraj2006py/ca-nowcaster/pull/13
-next_action: Auto-merge or merge Data Quality PR #13 (CI green); wait for Ingestion refresh command + full Phase 1 gate before Phase 2.
-last_updated: 2026-10-29T13:53:00Z
+next_action: DevOps/Orchestrator merge Ingestion PR #14 (CI green, mergeable); then Phase 1 gate / Phase 2.
+last_updated: 2026-10-29T14:06:00Z
 
 ## Status note
 
-Phase 1 in progress. Data Quality delivers `src/nowcaster/quality/` (validation, release calendar / `as_of`, pseudo-real-time lags), Phase 1 as_of leakage gate tests, and `docs/quality_report.md`. Coordinates with Ingestion via raw-store contract only (`docs/requests/ingest-raw-store-and-release-timestamps.md`). Does not edit features/models or loosen CI.
+Phase 1 in progress. Data Quality (#13) is on `main`. Ingestion implements StatCan WDS + BoC Valet clients, verified `series_registry.yaml` (10 series), DuckDB raw store with vintage dedupe, and `nowcaster-ingest-refresh` CLI. Live `--twice` refresh: first inserted 5240 rows, second inserted 0. Coordinates with Quality via raw-store contract / Valet release-timestamp request docs.
+
+### Refresh command
+
+```bash
+pip install -e ".[dev]"
+nowcaster-ingest-refresh --twice
+# or: python -m nowcaster.ingest.cli --twice
+```
 
 ### PRs
 
@@ -34,4 +43,11 @@ Phase 1 in progress. Data Quality delivers `src/nowcaster/quality/` (validation,
 | [#1](https://github.com/Yuvraj2006py/ca-nowcaster/pull/1) | Merged — Phase 0 skeleton |
 | [#2](https://github.com/Yuvraj2006py/ca-nowcaster/pull/2) | Merged — CI workflow + holdout guard |
 | [#11](https://github.com/Yuvraj2006py/ca-nowcaster/pull/11) | Merged green — pip-audit freeze |
-| [#13](https://github.com/Yuvraj2006py/ca-nowcaster/pull/13) | CI green — Data Quality as_of gate + quality report |
+| [#13](https://github.com/Yuvraj2006py/ca-nowcaster/pull/13) | Merged — Data Quality as_of gate + quality report |
+| [#14](https://github.com/Yuvraj2006py/ca-nowcaster/pull/14) | Open — Ingestion clients + registry + refresh CLI |
+
+### Auto-merge / human taps (still recommended)
+
+1. https://github.com/Yuvraj2006py/ca-nowcaster/settings → **Allow auto-merge**
+2. Branch ruleset on `main`: require PR + require status check **`ci`** + block force pushes
+3. Actions: allow GitHub Actions to create/approve PRs (Dependabot)
