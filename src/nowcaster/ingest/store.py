@@ -143,8 +143,20 @@ class RawStore:
     def fetch_all(self) -> list[dict[str, object]]:
         """Return all rows as dicts (for tests / debugging)."""
         assert self._conn is not None
-        cols = ", ".join(RAW_STORE_COLUMNS)
-        result = self._conn.execute(f"SELECT {cols} FROM raw_observations ORDER BY 1, 2, 4")
+        # Static SQL (contract columns only) — avoids Bandit B608 on dynamic SQL.
+        expected = (
+            "series_id",
+            "ref_period",
+            "value",
+            "release_timestamp",
+            "retrieved_at",
+        )
+        if RAW_STORE_COLUMNS != expected:
+            raise RuntimeError("RAW_STORE_COLUMNS drifted from fetch_all SELECT list")
+        result = self._conn.execute(
+            "SELECT series_id, ref_period, value, release_timestamp, retrieved_at "
+            "FROM raw_observations ORDER BY 1, 2, 4"
+        )
         rows = result.fetchall()
         out: list[dict[str, object]] = []
         for row in rows:
