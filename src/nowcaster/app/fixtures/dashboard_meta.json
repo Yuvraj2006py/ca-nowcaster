@@ -1,0 +1,8 @@
+{
+  "production_model": "ar1",
+  "baseline_model": "last_value",
+  "reference_baseline": "ar1",
+  "honest_verdict": "Phase 3 evaluation found no candidate model beats the AR(1) baseline on headline RMSE with statistical support. Production nowcast uses AR(1) until a candidate clearly wins.",
+  "eval_source": "docs/evaluation_report.md",
+  "using_sample_logs": true
+}
