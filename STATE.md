@@ -38,18 +38,14 @@ tasks:
     pr: https://github.com/Yuvraj2006py/ca-nowcaster/pull/21
   - id: CN-16
     role: Evaluation
-    status: doing
+    status: done
     pr: https://github.com/Yuvraj2006py/ca-nowcaster/pull/20
-    note: "Rebased onto main post-#21; candidate verdicts + holdout once per 0.1.0"
-next_action: DevOps merge #20 when CI green (infra + candidate verdicts + holdout burns).
-last_updated: 2026-10-29T15:20:00Z
+next_action: Start Phase 4 — Live Pipeline, Dashboard, and Security review; do not start Phase 5 docs/ship until Phase 4 gate passes.
+last_updated: 2026-10-29T15:30:00Z
 
 ## Status note
 
-Phase 3: Modeling [#21](https://github.com/Yuvraj2006py/ca-nowcaster/pull/21) merged.
-Evaluation [#20](https://github.com/Yuvraj2006py/ca-nowcaster/pull/20) rebased onto
-`main` with harness/metrics, candidate verdicts via `list_candidates` /
-`create_candidate`, and holdout burned once per final `(name, 0.1.0)`.
+Phase 3 is **complete** on `main`: Modeling candidates (#21) and Evaluation Skeptic report with candidate verdicts + holdout burns once per final `(name, 0.1.0)` (#20) are merged. Post-merge `ci` on `main` after #20 is **green**. Phase field stays `3` until Orchestrator formally opens Phase 4; prerequisite for Phase 4 is met.
 
 ### PRs
 
@@ -58,16 +54,16 @@ Evaluation [#20](https://github.com/Yuvraj2006py/ca-nowcaster/pull/20) rebased o
 | [#1](https://github.com/Yuvraj2006py/ca-nowcaster/pull/1) | Merged — Phase 0 skeleton |
 | [#2](https://github.com/Yuvraj2006py/ca-nowcaster/pull/2) | Merged — CI workflow + holdout guard |
 | [#11](https://github.com/Yuvraj2006py/ca-nowcaster/pull/11) | Merged green — pip-audit freeze |
-| [#13](https://github.com/Yuvraj2006py/ca-nowcaster/pull/13) | Merged — Data Quality as_of gate + quality report |
-| [#14](https://github.com/Yuvraj2006py/ca-nowcaster/pull/14) | Merged green — Ingestion |
+| [#13](https://github.com/Yuvraj2006py/ca-nowcaster/pull/13) | Merged — Data Quality |
+| [#14](https://github.com/Yuvraj2006py/ca-nowcaster/pull/14) | Merged — Ingestion |
 | [#15](https://github.com/Yuvraj2006py/ca-nowcaster/pull/15) | Merged — Phase 1 complete |
 | [#16](https://github.com/Yuvraj2006py/ca-nowcaster/pull/16) | Merged — Phase 2 baselines |
 | [#17](https://github.com/Yuvraj2006py/ca-nowcaster/pull/17) | Merged — Feature frame |
 | [#18](https://github.com/Yuvraj2006py/ca-nowcaster/pull/18) | Merged — Evaluation harness Phase 2 |
 | [#19](https://github.com/Yuvraj2006py/ca-nowcaster/pull/19) | Merged — Phase 2 → 3 |
 | [#21](https://github.com/Yuvraj2006py/ca-nowcaster/pull/21) | Merged — Phase 3 candidates @ 0.1.0 |
-| [#22](https://github.com/Yuvraj2006py/ca-nowcaster/pull/22) | Merged — STATE wait for #20 rebase |
-| [#20](https://github.com/Yuvraj2006py/ca-nowcaster/pull/20) | Open — Evaluation Phase 3 (rebased) |
+| [#22](https://github.com/Yuvraj2006py/ca-nowcaster/pull/22) | Merged — STATE wait for #20 |
+| [#20](https://github.com/Yuvraj2006py/ca-nowcaster/pull/20) | Merged green — Skeptic verdicts + holdout burns |
 
 ### Auto-merge / human taps (still recommended)
 
