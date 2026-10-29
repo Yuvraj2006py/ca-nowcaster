@@ -35,8 +35,8 @@ tasks:
   - id: CN-15
     role: Modeling
     status: doing
-    pr: null
-    note: "Phase 3 candidates (bridge, DFM, GBM, direction) registered; PR opening"
+    pr: https://github.com/Yuvraj2006py/ca-nowcaster/pull/21
+    note: "Phase 3 candidates registered at v0.1.0; ready for Skeptic holdout after merge"
   - id: CN-16
     role: Evaluation
     status: doing
