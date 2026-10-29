@@ -87,9 +87,7 @@ def grid_search_timeseries(
     if not param_grid:
         raise ValueError("param_grid must be non-empty")
 
-    folds = expanding_time_splits(
-        X.shape[0], n_splits=n_splits, min_train_size=min_train_size
-    )
+    folds = expanding_time_splits(X.shape[0], n_splits=n_splits, min_train_size=min_train_size)
     if not folds:
         # Too little history for CV: take the first grid point, count 0 CV evals.
         first = dict(param_grid[0])

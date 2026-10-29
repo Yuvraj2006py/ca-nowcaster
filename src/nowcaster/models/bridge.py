@@ -82,9 +82,7 @@ class BridgeRegression:
         X_imp = median_impute_apply(X_arr, self._medians)
 
         grid = [
-            {"alpha": float(a), "l1_ratio": float(r)}
-            for a in self.alphas
-            for r in self.l1_ratios
+            {"alpha": float(a), "l1_ratio": float(r)} for a in self.alphas for r in self.l1_ratios
         ]
 
         def _score(

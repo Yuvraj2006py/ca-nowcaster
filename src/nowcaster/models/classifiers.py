@@ -100,9 +100,7 @@ class _DirectionBase:
         X_sup = X_arr[indices]
         y_sup = labels
         if y_sup.size < max(8, self.min_train_size // 2):
-            raise ValueError(
-                f"not enough labeled direction rows after lag drop: {y_sup.size}"
-            )
+            raise ValueError(f"not enough labeled direction rows after lag drop: {y_sup.size}")
         # Need both classes for logistic / calibration.
         if np.unique(y_sup).size < 2:
             raise ValueError("direction labels are constant in the training window")
@@ -206,8 +204,7 @@ class _DirectionBase:
 
         points = self._predict_proba_rows(X_arr)
         intervals: list[PredictionIntervals] = [
-            clip_unit_interval(conformal_intervals(float(p), self._abs_residuals))
-            for p in points
+            clip_unit_interval(conformal_intervals(float(p), self._abs_residuals)) for p in points
         ]
         return ModelPrediction(
             points=points,

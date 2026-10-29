@@ -156,9 +156,7 @@ class GradientBoostingNowcast:
 
         X_arr = to_2d_float(X)
         if X_arr.shape[1] != self._n_features:
-            raise ValueError(
-                f"X has {X_arr.shape[1]} columns; GBM was fit with {self._n_features}"
-            )
+            raise ValueError(f"X has {X_arr.shape[1]} columns; GBM was fit with {self._n_features}")
         # ensure feature matrix contract even if caller passes a single series
         require_feature_matrix(X_arr, min_cols=1)
         points = np.asarray(self._model.predict(X_arr), dtype=np.float64)

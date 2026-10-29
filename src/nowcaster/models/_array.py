@@ -104,9 +104,7 @@ def require_feature_matrix(X: Any, *, name: str = "X", min_cols: int = 1) -> np.
     """
     arr = to_2d_float(X, name=name)
     if arr.shape[1] < min_cols:
-        raise ValueError(
-            f"{name} needs at least {min_cols} feature column(s), got {arr.shape[1]}"
-        )
+        raise ValueError(f"{name} needs at least {min_cols} feature column(s), got {arr.shape[1]}")
     return arr
 
 
@@ -144,9 +142,7 @@ def median_impute_apply(X: np.ndarray, medians: np.ndarray) -> np.ndarray:
     """
     out = np.array(X, dtype=np.float64, copy=True)
     if out.shape[1] != medians.shape[0]:
-        raise ValueError(
-            f"feature width {out.shape[1]} != median width {medians.shape[0]}"
-        )
+        raise ValueError(f"feature width {out.shape[1]} != median width {medians.shape[0]}")
     for j in range(out.shape[1]):
         mask = ~np.isfinite(out[:, j])
         if mask.any():

@@ -82,8 +82,7 @@ class DynamicFactorNowcast:
         X_arr, y_arr = align_xy(X, y)
         if y_arr.size < self.min_train_size:
             raise ValueError(
-                f"y needs at least {self.min_train_size} observations for DFM, "
-                f"got {y_arr.size}"
+                f"y needs at least {self.min_train_size} observations for DFM, got {y_arr.size}"
             )
         if not np.isfinite(y_arr).all():
             raise ValueError("y contains non-finite values")
