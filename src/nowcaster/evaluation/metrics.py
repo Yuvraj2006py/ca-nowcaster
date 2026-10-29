@@ -1,8 +1,8 @@
-"""Point, interval, directional, and classifier metric scaffolding.
+"""Point, interval, directional, and classifier metrics.
 
-Phase 2: RMSE/MAE vs baselines (ratios), directional accuracy, interval
-coverage. Classifier hooks stubbed for Phase 3. Full model verdicts and
-Diebold-Mariano / bootstrap CIs land in Phase 3 evaluation_report.md.
+Phase 3: RMSE/MAE vs baselines (ratios), directional accuracy, interval
+coverage, binary classifier metrics (confusion / precision / recall / F1),
+and calibration reliability bins for probability forecasts.
 """
 
 from __future__ import annotations
@@ -45,6 +45,43 @@ class BaselineRelativeMetrics:
 
 
 @dataclass(frozen=True)
+class CalibrationBin:
+    """One reliability-diagram bin for probability forecasts.
+
+    Inputs: predictions falling in [lower, upper).
+    Outputs: mean predicted probability and empirical positive rate.
+    Time allowed to know: labels only after release.
+    """
+
+    lower: float
+    upper: float
+    n: int
+    mean_predicted: float
+    fraction_positive: float
+
+
+@dataclass(frozen=True)
+class ClassifierMetrics:
+    """Binary direction-classifier metrics (beat previous month: yes/no).
+
+    Inputs: aligned true labels and predicted labels / probabilities.
+    Outputs: confusion matrix, precision, recall, F1, accuracy, calibration bins.
+    Time allowed to know: labels only after their release.
+    """
+
+    available: bool
+    n: int
+    accuracy: float | None
+    precision: float | None
+    recall: float | None
+    f1: float | None
+    # [[TN, FP], [FN, TP]] in sklearn convention for labels {0,1}
+    confusion_matrix: tuple[tuple[int, int], tuple[int, int]] | None
+    calibration_bins: tuple[CalibrationBin, ...] = ()
+    note: str = ""
+
+
+@dataclass(frozen=True)
 class MetricBundle:
     """Headline (COVID-excluded) and full-sample metric views.
 
@@ -58,24 +95,8 @@ class MetricBundle:
     classifier: dict[str, Any] = field(default_factory=dict)
 
 
-@dataclass(frozen=True)
-class ClassifierMetricsStub:
-    """Placeholder for Phase 3 binary direction-classifier metrics.
-
-    Inputs: none in Phase 2 (stub only).
-    Outputs: empty structure documenting expected Phase 3 fields.
-    Time allowed to know: n/a until Phase 3 wires real labels/predictions.
-    """
-
-    available: bool = False
-    note: str = (
-        "Classifier metrics (accuracy, precision, recall, confusion matrix) "
-        "are stubbed in Phase 2; Phase 3 evaluation_report.md will fill them."
-    )
-    accuracy: float | None = None
-    precision: float | None = None
-    recall: float | None = None
-    confusion_matrix: list[list[int]] | None = None
+# Back-compat alias used by Phase 2 exports / tests.
+ClassifierMetricsStub = ClassifierMetrics
 
 
 def _as_float_array(values: Any) -> np.ndarray:
@@ -233,11 +254,242 @@ def ratio_vs_baseline(
     )
 
 
-def classifier_metrics_stub() -> ClassifierMetricsStub:
-    """Return Phase 2 stub for classifier metrics.
+def _binary_labels(values: Any) -> np.ndarray:
+    arr = np.asarray(values)
+    if arr.dtype == bool:
+        return arr.astype(int)
+    out = np.asarray(arr, dtype=float)
+    # Map {0,1} or {-1,1}/sign to {0,1}; positives (>0) -> 1.
+    return (out > 0).astype(int)
 
-    Inputs: none.
-    Outputs: ClassifierMetricsStub marking metrics unavailable until Phase 3.
+
+def calibration_reliability(
+    y_true: Any,
+    y_prob: Any,
+    *,
+    n_bins: int = 10,
+) -> tuple[CalibrationBin, ...]:
+    """Reliability-diagram bins for probability forecasts of the positive class.
+
+    Inputs: binary labels; predicted probabilities in [0, 1]; bin count.
+    Outputs: tuple of CalibrationBin (empty bins omitted).
+    Time allowed to know: caller-supplied labels only.
+    """
+    labels = _binary_labels(y_true)
+    probs = _as_float_array(y_prob)
+    if labels.size != probs.size:
+        raise ValueError("y_true and y_prob must have equal length")
+    if labels.size == 0:
+        return ()
+    if n_bins < 1:
+        raise ValueError("n_bins must be >= 1")
+    edges = np.linspace(0.0, 1.0, n_bins + 1)
+    bins: list[CalibrationBin] = []
+    for i in range(n_bins):
+        lo = float(edges[i])
+        hi = float(edges[i + 1])
+        if i == n_bins - 1:
+            mask = (probs >= lo) & (probs <= hi)
+        else:
+            mask = (probs >= lo) & (probs < hi)
+        count = int(np.sum(mask))
+        if count == 0:
+            continue
+        bins.append(
+            CalibrationBin(
+                lower=lo,
+                upper=hi,
+                n=count,
+                mean_predicted=float(np.mean(probs[mask])),
+                fraction_positive=float(np.mean(labels[mask])),
+            )
+        )
+    return tuple(bins)
+
+
+def compute_classifier_metrics(
+    y_true: Any,
+    y_pred: Any,
+    *,
+    y_prob: Any | None = None,
+    n_calibration_bins: int = 10,
+) -> ClassifierMetrics:
+    """Confusion matrix, precision, recall, F1, accuracy, optional calibration.
+
+    Positive class = 1 (growth beat previous month / positive MoM direction).
+
+    Inputs: true labels; predicted hard labels; optional probabilities for
+      calibration; bin count for reliability diagram.
+    Outputs: ClassifierMetrics.
+    Time allowed to know: caller-supplied labels only.
+    """
+    truth = _binary_labels(y_true)
+    pred = _binary_labels(y_pred)
+    if truth.size != pred.size:
+        raise ValueError("y_true and y_pred must have equal length")
+    if truth.size == 0:
+        return ClassifierMetrics(
+            available=False,
+            n=0,
+            accuracy=None,
+            precision=None,
+            recall=None,
+            f1=None,
+            confusion_matrix=None,
+            note="no classifier observations",
+        )
+
+    tn = int(np.sum((truth == 0) & (pred == 0)))
+    fp = int(np.sum((truth == 0) & (pred == 1)))
+    fn = int(np.sum((truth == 1) & (pred == 0)))
+    tp = int(np.sum((truth == 1) & (pred == 1)))
+    accuracy = float((tp + tn) / truth.size)
+    precision = float(tp / (tp + fp)) if (tp + fp) else None
+    recall = float(tp / (tp + fn)) if (tp + fn) else None
+    if precision is None or recall is None or (precision + recall) == 0:
+        f1 = None
+    else:
+        f1 = float(2 * precision * recall / (precision + recall))
+
+    cal: tuple[CalibrationBin, ...] = ()
+    if y_prob is not None:
+        cal = calibration_reliability(truth, y_prob, n_bins=n_calibration_bins)
+
+    return ClassifierMetrics(
+        available=True,
+        n=int(truth.size),
+        accuracy=accuracy,
+        precision=precision,
+        recall=recall,
+        f1=f1,
+        confusion_matrix=((tn, fp), (fn, tp)),
+        calibration_bins=cal,
+        note="",
+    )
+
+
+def classifier_metrics_to_dict(metrics: ClassifierMetrics) -> dict[str, Any]:
+    """Serialize ClassifierMetrics for MetricBundle.classifier storage.
+
+    Inputs: ClassifierMetrics.
+    Outputs: JSON-friendly dict.
     Time allowed to know: n/a.
     """
-    return ClassifierMetricsStub()
+    cm = metrics.confusion_matrix
+    return {
+        "available": metrics.available,
+        "n": metrics.n,
+        "accuracy": metrics.accuracy,
+        "precision": metrics.precision,
+        "recall": metrics.recall,
+        "f1": metrics.f1,
+        "confusion_matrix": [list(cm[0]), list(cm[1])] if cm is not None else None,
+        "calibration_bins": [
+            {
+                "lower": b.lower,
+                "upper": b.upper,
+                "n": b.n,
+                "mean_predicted": b.mean_predicted,
+                "fraction_positive": b.fraction_positive,
+            }
+            for b in metrics.calibration_bins
+        ],
+        "note": metrics.note,
+    }
+
+
+def classifier_metrics_stub() -> ClassifierMetrics:
+    """Return empty classifier metrics when no direction model is registered.
+
+    Inputs: none.
+    Outputs: ClassifierMetrics with available=False.
+    Time allowed to know: n/a.
+    """
+    return ClassifierMetrics(
+        available=False,
+        n=0,
+        accuracy=None,
+        precision=None,
+        recall=None,
+        f1=None,
+        confusion_matrix=None,
+        note=(
+            "No Phase 3 direction classifier registered yet; "
+            "sign(point) directional accuracy is reported on the regression side."
+        ),
+    )
+
+
+def direction_labels_from_growth(growth: Any) -> np.ndarray:
+    """Map MoM growth to binary 'beat previous' labels via sign > 0.
+
+    For growth already expressed as MoM change, positive growth = beat flat/zero
+    previous (secondary target approximation when lag-1 comparison is unavailable).
+
+    Inputs: MoM growth values.
+    Outputs: 0/1 int array.
+    Time allowed to know: caller-supplied growth only.
+    """
+    return _binary_labels(growth)
+
+
+def calibration_svg(
+    bins: tuple[CalibrationBin, ...],
+    *,
+    width: int = 420,
+    height: int = 320,
+) -> str:
+    """Render a simple reliability diagram as SVG (no plotting dependency).
+
+    Inputs: calibration bins from compute_classifier_metrics.
+    Outputs: SVG string.
+    Time allowed to know: n/a (summary bins only).
+    """
+    pad_l, pad_r, pad_t, pad_b = 48, 20, 20, 48
+    plot_w = width - pad_l - pad_r
+    plot_h = height - pad_t - pad_b
+
+    def xy(px: float, py: float) -> tuple[float, float]:
+        return pad_l + px * plot_w, pad_t + (1.0 - py) * plot_h
+
+    parts = [
+        f'<svg xmlns="http://www.w3.org/2000/svg" width="{width}" height="{height}" '
+        f'viewBox="0 0 {width} {height}">',
+        '<rect width="100%" height="100%" fill="#fafafa"/>',
+        f'<line x1="{pad_l}" y1="{pad_t}" x2="{pad_l}" y2="{pad_t + plot_h}" '
+        'stroke="#333" stroke-width="1"/>',
+        f'<line x1="{pad_l}" y1="{pad_t + plot_h}" x2="{pad_l + plot_w}" '
+        f'y2="{pad_t + plot_h}" stroke="#333" stroke-width="1"/>',
+    ]
+    # Diagonal perfect-calibration line.
+    x0, y0 = xy(0.0, 0.0)
+    x1, y1 = xy(1.0, 1.0)
+    parts.append(
+        f'<line x1="{x0}" y1="{y0}" x2="{x1}" y2="{y1}" '
+        'stroke="#999" stroke-dasharray="4 3" stroke-width="1"/>'
+    )
+    # Points + connecting polyline.
+    if bins:
+        coords: list[str] = []
+        for b in bins:
+            px, py = xy(b.mean_predicted, b.fraction_positive)
+            coords.append(f"{px},{py}")
+            r = 3 + min(b.n, 20) * 0.15
+            parts.append(
+                f'<circle cx="{px}" cy="{py}" r="{r}" fill="#1f4e79" fill-opacity="0.85"/>'
+            )
+        parts.append(
+            f'<polyline points="{" ".join(coords)}" fill="none" '
+            'stroke="#1f4e79" stroke-width="1.5"/>'
+        )
+    parts.append(
+        f'<text x="{pad_l + plot_w / 2}" y="{height - 12}" text-anchor="middle" '
+        'font-size="12" fill="#333">Mean predicted probability</text>'
+    )
+    parts.append(
+        f'<text x="14" y="{pad_t + plot_h / 2}" text-anchor="middle" '
+        f'font-size="12" fill="#333" '
+        f'transform="rotate(-90 14 {pad_t + plot_h / 2})">Fraction positive</text>'
+    )
+    parts.append("</svg>")
+    return "\n".join(parts)

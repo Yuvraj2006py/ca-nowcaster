@@ -30,15 +30,12 @@ for baseline in iter_baselines(["last_value", "ar1", "rolling_mean"]):
 `nowcaster.evaluation.discover_baseline_factories()` and
 `iter_phase2_baselines()` wrap that API for the walk-forward suite and gate.
 
-## What Phase 3 will add
+## Phase 3 (see `docs/evaluation_report.md`)
 
-Phase 3 produces **`docs/evaluation_report.md`** with per-model verdicts
-(which models beat baselines), Diebold-Mariano tests, bootstrap confidence
-intervals, classifier metrics (precision/recall/confusion matrix), and a single
-locked-holdout touch per final model set.
-
-This Phase 2 PR does **not** write `evaluation_report.md` and does **not** burn
-the holdout.
+Phase 3 adds Diebold-Mariano, bootstrap RMSE-ratio CIs, classifier metrics +
+calibration plot, leakage collapse audits, and the once-per-version holdout
+API. Holdout stays locked until Modeling registers final candidate versions
+(`docs/requests/modeling-phase3-candidate-registration.md`).
 
 ## Gate
 
