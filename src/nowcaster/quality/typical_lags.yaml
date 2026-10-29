@@ -1,0 +1,71 @@
+# Typical publication lags for pseudo-real-time history.
+#
+# OWNED BY: Data Quality (src/nowcaster/quality/).
+# PURPOSE: Approximate release_timestamp = end_of_ref_period + lag_days
+#          when measured release times are missing from the raw store.
+# FLAG: Every imputed release MUST set release_is_approximate=true.
+#
+# These are NOT verified StatCan/BoC API fields. They are engineering
+# approximations of common The Daily / Valet timing. Prefer measured
+# release_timestamp from ingest. Request updates via docs/requests/.
+#
+# series_id values are provisional placeholders matching expected registry
+# ids once Ingestion verifies them. Unknown series_ids get no default lag.
+
+lags:
+  - series_id: ca_gdp_basic_prices
+    lag_days_after_ref_period_end: 60
+    approximate: true
+    notes: >
+      Monthly GDP by industry (expected table 36-10-0434-01) typically lands
+      about two months after the reference month in The Daily. Approximation.
+
+  - series_id: ca_lfs_employment
+    lag_days_after_ref_period_end: 10
+    approximate: true
+    notes: >
+      LFS usually releases early in the following month (often first Friday).
+      10 calendar days is a conservative round number, not a schedule.
+
+  - series_id: ca_lfs_hours
+    lag_days_after_ref_period_end: 10
+    approximate: true
+    notes: Same vintage cadence as LFS employment (approximation).
+
+  - series_id: ca_cpi_all_items
+    lag_days_after_ref_period_end: 18
+    approximate: true
+    notes: >
+      CPI All-items typically mid-month after the reference month (~18 days).
+
+  - series_id: ca_retail_trade
+    lag_days_after_ref_period_end: 52
+    approximate: true
+    notes: Retail trade often ~7–8 weeks after month end (approximation).
+
+  - series_id: ca_manufacturing_sales
+    lag_days_after_ref_period_end: 45
+    approximate: true
+    notes: Manufacturing sales often ~6–7 weeks after month end (approximation).
+
+  - series_id: ca_housing_starts
+    lag_days_after_ref_period_end: 15
+    approximate: true
+    notes: CMHC/StatCan housing starts often mid following month (approximation).
+
+  - series_id: boc_policy_rate
+    lag_days_after_ref_period_end: 0
+    approximate: true
+    notes: >
+      Policy rate decisions are public same day; for monthly ref_period use
+      month-end with 0 lag as a coarse stand-in until Valet timestamps exist.
+
+  - series_id: boc_cad_usd
+    lag_days_after_ref_period_end: 1
+    approximate: true
+    notes: Daily FX; monthly aggregates assumed available next calendar day.
+
+  - series_id: boc_commodity_price_index
+    lag_days_after_ref_period_end: 1
+    approximate: true
+    notes: Valet commodity index; next-day stand-in until measured timestamps.
