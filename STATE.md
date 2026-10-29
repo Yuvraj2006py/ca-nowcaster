@@ -51,7 +51,7 @@ tasks:
     role: Dashboard
     status: done
     pr: https://github.com/Yuvraj2006py/ca-nowcaster/pull/25
-    note: "Rebased onto main+#24; DevOps ping ready; Cloud URL needs human"
+    note: "CLEAN + CI green post-#24 rebase; DevOps ping docs/requests/devops-ping-dashboard-pr-25.md"
   - id: CN-17
     role: Live Pipeline
     status: doing
