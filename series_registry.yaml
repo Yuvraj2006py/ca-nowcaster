@@ -1,0 +1,22 @@
+# series_registry.yaml
+#
+# Schema (every entry must match; leave series: [] until Ingestion verifies IDs):
+#
+# series:
+#   - series_id: string          # stable internal id, e.g. "ca_gdp_basic_mom"
+#     source: string             # "statcan" | "boc_valet"
+#     table_id: string | null    # StatCan table (e.g. "36-10-0434-01"); null for Valet
+#     vector_id: string | null   # StatCan vector id; null until verified
+#     valet_series: string | null  # BoC Valet series name; null for StatCan
+#     name: string               # human-readable label
+#     frequency: string          # e.g. "monthly"
+#     unit: string               # e.g. "percent", "index", "persons"
+#     verified_at: string | null # ISO-8601 UTC when metadata was verified live
+#     verification_notes: string # what endpoint/fields were checked
+#     target_role: string        # "primary_target" | "secondary_target" | "indicator"
+#
+# Rules:
+# - Never invent table IDs, vector IDs, or Valet names. Verify via live metadata.
+# - Empty list is intentional for Phase 0; Ingestion fills after verification.
+
+series: []
